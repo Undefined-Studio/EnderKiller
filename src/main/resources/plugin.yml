@@ -1,0 +1,9 @@
+name: Ender Dragon Killer //the plugins name as it should appear in the plugin list /pl
+version: //the plugin's version
+author: Undefined Developers//the author's name
+main: com.udstu.enderkiller.Main //your main class were the onEnable and onDisable methods are. (Ex: org.spigotmc.tutorial.Tutorial;)
+website: www.udstu.com //your website appear with /version <pluginname>
+commands: // if you have some commands
+      <command>:
+               description: //describe your command it will appear with /help
+               usage: //how is the commands' syntax
