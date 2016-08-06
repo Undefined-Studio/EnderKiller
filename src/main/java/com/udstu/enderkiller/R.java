@@ -17,6 +17,10 @@ public class R {
         return langConfig.getString(key);
     }
 
+    public static String getConfig(String key) {
+        return mainConfig.getString(key);
+    }
+
     public static JavaPlugin getMainClass() {
         return mainClass;
     }

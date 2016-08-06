@@ -1,5 +1,6 @@
 package com.udstu.enderkiller.command;
 
+import com.udstu.enderkiller.Config;
 import com.udstu.enderkiller.R;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,7 +29,7 @@ public class CommandEk implements CommandExecutor {
             methodName = method.getName();
             matcher = pattern.matcher(methodName);
             if (matcher.matches()) {
-                helpList.add("/"+label+" "+methodName.substring(7).toLowerCase()+" "+R.getLang(methodName));
+                helpList.add("/" + label + " " + methodName.substring("command".length()).toLowerCase() + " " + R.getLang(methodName));
             }
         }
 
@@ -37,25 +38,30 @@ public class CommandEk implements CommandExecutor {
         return true;
     }
 
+    private boolean commandReload(CommandSender commandSender, Command command, String label, String[] args) {
+        if (Config.reload()) {
+            commandSender.sendMessage(R.getLang("reloadedConfiguration"));
+        } else {
+            System.out.println("An error occurred while loading configuration");
+        }
+        return true;
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        //根据参数长度分类
-        switch (args.length) {
-            case 0: {
-                return commandHelp(commandSender, command, label, args);
-            }
-            case 1: {
-                switch (args[0]) {
-                    case "help":{
-                        return commandHelp(commandSender, command, label, args);
-                    }
+        if (args.length != 0) {
+            switch (args[0]) {
+                case "help": {
+                    return commandHelp(commandSender, command, label, args);
+                }
+                case "reload": {
+                    return commandReload(commandSender, command, label, args);
                 }
             }
-            default:{
-                //无效的参数,输入 /ek help 查看帮助
-                commandSender.sendMessage(R.getLang("invalidCommand").replace("{$help}","/"+label+" "+"help"));
-                return true;
-            }
         }
+
+        //无效的参数,输入 /ek help 查看帮助
+        commandSender.sendMessage(R.getLang("invalidCommand").replace("{$help}", "/" + label + " " + "help"));
+        return true;
     }
 }

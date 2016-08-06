@@ -13,7 +13,9 @@ public final class Main extends JavaPlugin {
         this.getCommand("ek").setExecutor(new CommandEk());
 
         Config.setMainClass(this);
-        Config.load();
+        if (!Config.load()) {
+            System.out.println("An error occurred while loading configuration");
+        }
     }
 
     @Override
