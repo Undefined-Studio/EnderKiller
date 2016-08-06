@@ -1,0 +1,3 @@
+commandHelp: 显示本帮助
+
+invalidCommand: 无效的参数,输入 {$help} 查看帮助

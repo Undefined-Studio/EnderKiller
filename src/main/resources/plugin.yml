@@ -6,6 +6,6 @@ depend:
 website: http://www.udstu.com
 commands:
   ek:
-    description: This is EnderKiller.
-    usage: /<command>
+    description: Show the commands available of EnderKiller.
+    usage: /<command> [arguments]
     aliases: [enderkiller]
