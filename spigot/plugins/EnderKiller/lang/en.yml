@@ -18,3 +18,5 @@ roomId: roomId
 alreadyInARoom: Already in a room
 noSuchRoom: No such room
 roomIsFull: Room is full
+notInARoom: Not in a room
+cannotExitInGame: Cannot exit in game

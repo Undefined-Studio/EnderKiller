@@ -34,6 +34,15 @@ public class Room {
         }
     }
 
+    public boolean remove(Player player) {
+        if (status != RoomStatus.inGame) {
+            players.remove(player);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public List<Player> getPlayers() {
         return players;
     }

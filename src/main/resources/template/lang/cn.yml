@@ -18,3 +18,5 @@ roomId: 房间号
 alreadyInARoom: 已在一个房间中
 noSuchRoom: 没有这个房间
 roomIsFull: 房间已满
+notInARoom: 不在一个房间中
+cannotExitInGame: 不可在游戏中退出

@@ -124,6 +124,25 @@ public class CommandEk implements CommandExecutor {
         }
     }
 
+    //退出房间 /ek exit
+    private void commandExit(CommandSender commandSender, Command command, String label, String[] args) {
+        Room locatedRoom = null;
+
+        for (Room room : Lobby.getRoomList()) {
+            for (Player player : room.getPlayers()) {
+                if (player == commandSender) {
+                    locatedRoom = room;
+                }
+            }
+        }
+
+        if (locatedRoom == null) {
+            commandSender.sendMessage(R.getLang("notInARoom"));
+        } else if (!locatedRoom.remove((Player) commandSender)) {
+            commandSender.sendMessage(R.getLang("cannotExitInGame"));
+        }
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -147,6 +166,14 @@ public class CommandEk implements CommandExecutor {
                 case "join": {
                     if (Player.class.isInstance(commandSender)) {
                         commandJoin(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "exit": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandExit(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }
