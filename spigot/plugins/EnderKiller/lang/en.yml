@@ -1,5 +1,10 @@
 commandHelp: Show this help
 commandReload: Reload configuration
+commandCreate: Create a room
+commandList: Show all rooms
 
+usage: Usage
+modeAllowed: Mode allowed
 invalidCommand: Invalid argument(s) ,type {$help} for help
 reloadedConfiguration: Reloaded configuration
+numberOfRoomsOutOfLimit: Number of rooms out of limit

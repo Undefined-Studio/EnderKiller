@@ -1,7 +1,6 @@
 package com.udstu.enderkiller.command;
 
-import com.udstu.enderkiller.Config;
-import com.udstu.enderkiller.R;
+import com.udstu.enderkiller.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +16,7 @@ import java.util.regex.Pattern;
  * Command ek
  */
 public class CommandEk implements CommandExecutor {
-    //输出help菜单
+    //输出help菜单 /ek help
     private boolean commandHelp(CommandSender commandSender, Command command, String label, String[] args) {
         List<String> helpList = new ArrayList<>();
         Pattern pattern = Pattern.compile("^command.*");
@@ -39,13 +38,44 @@ public class CommandEk implements CommandExecutor {
         return true;
     }
 
-    //重载配置文件
+    //重载配置文件 /ek reload
     private boolean commandReload(CommandSender commandSender, Command command, String label, String[] args) {
         if (Config.reload()) {
             commandSender.sendMessage(R.getLang("reloadedConfiguration"));
         } else {
             commandSender.sendMessage("An error occurred while loading configuration");
         }
+
+        return true;
+    }
+
+    //新建房间 /ek create roomName mode
+    private boolean commandCreate(CommandSender commandSender, Command command, String label, String[] args) {
+        if (args.length < 3) {
+            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create <roomName> <mode>");
+            return true;
+        }
+        if (!Util.isInteger(args[2]) || Integer.parseInt(args[2]) != 8) {
+            commandSender.sendMessage(R.getLang("modeAllowed") + ": " + "8");
+            return true;
+        }
+
+        if (!Lobby.add(new Room(args[1], Integer.parseInt(args[2])))) {
+            commandSender.sendMessage(R.getLang("numberOfRoomsOutOfLimit"));
+        }
+
+        return true;
+    }
+
+    //列出房间 /ek list
+    private boolean commandList(CommandSender commandSender, Command command, String label, String[] args) {
+        List<String> roomStatus = new ArrayList<>();
+
+        for (Room room : Lobby.getRoomList()) {
+            roomStatus.add(room.getId() + "." + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot());
+        }
+
+        commandSender.sendMessage(roomStatus.toArray(new String[roomStatus.size()]));
 
         return true;
     }
@@ -59,6 +89,12 @@ public class CommandEk implements CommandExecutor {
                 }
                 case "reload": {
                     return commandReload(commandSender, command, label, args);
+                }
+                case "create": {
+                    return commandCreate(commandSender, command, label, args);
+                }
+                case "list": {
+                    return commandList(commandSender, command, label, args);
                 }
             }
         }

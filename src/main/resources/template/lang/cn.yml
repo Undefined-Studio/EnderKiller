@@ -1,5 +1,10 @@
 commandHelp: 显示本帮助
 commandReload: 重载配置文件
+commandCreate: 创建一个房间
+commandList: 显示所有房间
 
+usage: 用法
+modeAllowed: 允许的模式
 invalidCommand: 无效的参数,输入 {$help} 查看帮助
 reloadedConfiguration: 已重载配置文件
+numberOfRoomsOutOfLimit: 房间数超出限制
