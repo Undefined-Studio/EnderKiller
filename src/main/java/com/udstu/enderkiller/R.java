@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Resource class
  */
 public class R {
-    private static JavaPlugin mainClass=null;
+    private static JavaPlugin mainClass = null;
     private static YamlConfiguration mainConfig = null;
     private static YamlConfiguration langConfig = null;
 
