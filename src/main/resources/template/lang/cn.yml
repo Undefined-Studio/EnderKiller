@@ -12,7 +12,6 @@ modeAllowed: 允许的模式
 invalidCommand: 无效的参数,输入 {$help} 查看帮助 #{$help}
 reloadedConfiguration: 已重载配置文件
 numberOfRoomsOutOfLimit: 房间数超出限制
-roomName: 房间名
 mode: 模式
 onlyPlayerCanUseThisCommand: 只有玩家可以使用此命令
 roomId: 房间号

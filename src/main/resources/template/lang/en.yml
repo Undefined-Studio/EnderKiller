@@ -12,7 +12,6 @@ modeAllowed: Mode allowed
 invalidCommand: Invalid argument(s) ,type {$help} for help  #{$help}
 reloadedConfiguration: Reloaded configuration
 numberOfRoomsOutOfLimit: Number of rooms out of limit
-roomName: roomName
 mode: mode
 onlyPlayerCanUseThisCommand: Only player can use this command
 roomId: roomId

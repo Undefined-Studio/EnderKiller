@@ -46,19 +46,17 @@ public class CommandEk implements CommandExecutor {
         }
     }
 
-    //新建房间 /ek create <roomName> <mode>
+    //新建房间 /ek create <mode>
     private void commandCreate(CommandSender commandSender, Command command, String label, String[] args) {
-        String roomName;
         String mode;
         int modeInt;
         Room newRoom;
 
-        if (args.length < 3) {
+        if (args.length < 2) {
             commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create <" + R.getLang("roomName") + "> <" + R.getLang("mode") + ">");
             return;
         }
-        roomName = args[1];
-        mode = args[2];
+        mode = args[1];
 
         if (!Util.isInteger(mode) || Integer.parseInt(mode) != 8) {
             commandSender.sendMessage(R.getLang("modeAllowed") + ": " + "8");
@@ -66,7 +64,7 @@ public class CommandEk implements CommandExecutor {
         }
         modeInt = Integer.parseInt(mode);
 
-        newRoom = new Room(roomName, modeInt);
+        newRoom = new Room(commandSender.getName(), modeInt);
         if (!Lobby.add(newRoom)) {
             commandSender.sendMessage(R.getLang("numberOfRoomsOutOfLimit"));
             return;
