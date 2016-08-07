@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * Command ek
  */
 public class CommandEk implements CommandExecutor {
+    //输出help菜单
     private boolean commandHelp(CommandSender commandSender, Command command, String label, String[] args) {
         List<String> helpList = new ArrayList<>();
         Pattern pattern = Pattern.compile("^command.*");
@@ -24,7 +25,7 @@ public class CommandEk implements CommandExecutor {
         String methodName;
         Matcher matcher;
 
-        //获取所有指令名并得到对应文本
+        //获取所有指令名(本类中以command开头的方法)并得到对应文本
         for (Method method : methods) {
             methodName = method.getName();
             matcher = pattern.matcher(methodName);
@@ -38,12 +39,14 @@ public class CommandEk implements CommandExecutor {
         return true;
     }
 
+    //重载配置文件
     private boolean commandReload(CommandSender commandSender, Command command, String label, String[] args) {
         if (Config.reload()) {
             commandSender.sendMessage(R.getLang("reloadedConfiguration"));
         } else {
-            System.out.println("An error occurred while loading configuration");
+            commandSender.sendMessage("An error occurred while loading configuration");
         }
+
         return true;
     }
 
@@ -62,6 +65,7 @@ public class CommandEk implements CommandExecutor {
 
         //无效的参数,输入 /ek help 查看帮助
         commandSender.sendMessage(R.getLang("invalidCommand").replace("{$help}", "/" + label + " " + "help"));
+
         return true;
     }
 }

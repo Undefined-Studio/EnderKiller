@@ -1,5 +1,0 @@
-commandHelp: 显示本帮助
-commandReload: 重载配置文件
-
-invalidCommand: 无效的参数,输入 {$help} 查看帮助
-reloadedConfiguration: 已重载配置文件

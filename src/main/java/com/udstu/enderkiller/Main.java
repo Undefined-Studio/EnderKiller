@@ -12,10 +12,9 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         this.getCommand("ek").setExecutor(new CommandEk());
 
+        //传入主类(指本类)引用至Config,并执行一次配置文件载入
         Config.setMainClass(this);
-        if (!Config.load()) {
-            System.out.println("An error occurred while loading configuration");
-        }
+        Config.load();
     }
 
     @Override
