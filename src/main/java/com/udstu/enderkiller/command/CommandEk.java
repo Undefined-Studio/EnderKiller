@@ -4,6 +4,7 @@ import com.udstu.enderkiller.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class CommandEk implements CommandExecutor {
     //输出help菜单 /ek help
-    private boolean commandHelp(CommandSender commandSender, Command command, String label, String[] args) {
+    private void commandHelp(CommandSender commandSender, Command command, String label, String[] args) {
         List<String> helpList = new ArrayList<>();
         Pattern pattern = Pattern.compile("^command.*");
         Method[] methods = this.getClass().getDeclaredMethods();
@@ -34,50 +35,95 @@ public class CommandEk implements CommandExecutor {
         }
 
         commandSender.sendMessage(helpList.toArray(new String[helpList.size()]));
-
-        return true;
     }
 
     //重载配置文件 /ek reload
-    private boolean commandReload(CommandSender commandSender, Command command, String label, String[] args) {
+    private void commandReload(CommandSender commandSender, Command command, String label, String[] args) {
         if (Config.reload()) {
             commandSender.sendMessage(R.getLang("reloadedConfiguration"));
         } else {
             commandSender.sendMessage("An error occurred while loading configuration");
         }
-
-        return true;
     }
 
-    //新建房间 /ek create roomName mode
-    private boolean commandCreate(CommandSender commandSender, Command command, String label, String[] args) {
+    //新建房间 /ek create <roomName> <mode>
+    private void commandCreate(CommandSender commandSender, Command command, String label, String[] args) {
+        String roomName;
+        String mode;
+        int modeInt;
+        Room newRoom;
+
         if (args.length < 3) {
-            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create <roomName> <mode>");
-            return true;
+            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create <" + R.getLang("roomName") + "> <" + R.getLang("mode") + ">");
+            return;
         }
-        if (!Util.isInteger(args[2]) || Integer.parseInt(args[2]) != 8) {
+        roomName = args[1];
+        mode = args[2];
+
+        if (!Util.isInteger(mode) || Integer.parseInt(mode) != 8) {
             commandSender.sendMessage(R.getLang("modeAllowed") + ": " + "8");
-            return true;
+            return;
         }
+        modeInt = Integer.parseInt(mode);
 
-        if (!Lobby.add(new Room(args[1], Integer.parseInt(args[2])))) {
+        newRoom = new Room(roomName, modeInt);
+        if (!Lobby.add(newRoom)) {
             commandSender.sendMessage(R.getLang("numberOfRoomsOutOfLimit"));
+            return;
         }
 
-        return true;
+        //若命令来源是玩家则在房间创建完毕后加入房间
+        if (Player.class.isInstance(commandSender)) {
+            commandJoin(commandSender, command, label, new String[]{"join", Integer.valueOf(newRoom.getId()).toString()});
+        }
     }
 
     //列出房间 /ek list
-    private boolean commandList(CommandSender commandSender, Command command, String label, String[] args) {
-        List<String> roomStatus = new ArrayList<>();
+    private void commandList(CommandSender commandSender, Command command, String label, String[] args) {
+        List<String> roomInfoList = new ArrayList<>();
 
         for (Room room : Lobby.getRoomList()) {
-            roomStatus.add(room.getId() + "." + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot());
+            roomInfoList.add(room.getId() + " " + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
         }
 
-        commandSender.sendMessage(roomStatus.toArray(new String[roomStatus.size()]));
+        commandSender.sendMessage(roomInfoList.toArray(new String[roomInfoList.size()]));
+    }
 
-        return true;
+    //加入房间 /ek join <roomId>
+    private void commandJoin(CommandSender commandSender, Command command, String label, String[] args) {
+        String roomId;
+        int roomIdInt;
+        Room targetRoom = null;
+
+        if (args.length < 2) {
+            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " join <" + R.getLang("roomId") + ">");
+            return;
+        }
+        roomId = args[1];
+
+        if (!Util.isInteger(roomId)) {
+            commandSender.sendMessage(R.getLang("noSuchRoom"));
+            return;
+        }
+        roomIdInt = Integer.parseInt(roomId);
+
+        for (Room room : Lobby.getRoomList()) {
+            if (room.getId() == roomIdInt) {
+                targetRoom = room;
+            }
+            for (Player player : room.getPlayers()) {
+                if (player == commandSender) {
+                    commandSender.sendMessage(R.getLang("alreadyInARoom"));
+                    return;
+                }
+            }
+        }
+
+        if (targetRoom == null) {
+            commandSender.sendMessage(R.getLang("noSuchRoom"));
+        } else if (!targetRoom.add((Player) commandSender)) {
+            commandSender.sendMessage(R.getLang("roomIsFull"));
+        }
     }
 
     @Override
@@ -85,16 +131,28 @@ public class CommandEk implements CommandExecutor {
         if (args.length != 0) {
             switch (args[0]) {
                 case "help": {
-                    return commandHelp(commandSender, command, label, args);
+                    commandHelp(commandSender, command, label, args);
+                    return true;
                 }
                 case "reload": {
-                    return commandReload(commandSender, command, label, args);
+                    commandReload(commandSender, command, label, args);
+                    return true;
                 }
                 case "create": {
-                    return commandCreate(commandSender, command, label, args);
+                    commandCreate(commandSender, command, label, args);
+                    return true;
                 }
                 case "list": {
-                    return commandList(commandSender, command, label, args);
+                    commandList(commandSender, command, label, args);
+                    return true;
+                }
+                case "join": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandJoin(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ public class Room {
     private String name;
     private int slot;
     private int id;
+    private RoomStatus status = RoomStatus.waitingForStart;
 
     //模式以游戏人数命名,例如12人局则传入12,此时最大人数12人
     public Room(String name, int mode) {
@@ -46,5 +48,9 @@ public class Room {
 
     public int getId() {
         return id;
+    }
+
+    public RoomStatus getStatus() {
+        return status;
     }
 }
