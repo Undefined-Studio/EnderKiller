@@ -84,11 +84,12 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("numberOfRoomsOutOfLimit"));
         } else {
             Lobby.add(newRoom);
-        }
+            commandSender.sendMessage(R.getLang("createRoomSuccessful"));
 
-        //若命令来源是玩家则在房间创建完毕后加入房间
-        if (Player.class.isInstance(commandSender)) {
-            commandJoin(commandSender, command, label, new String[]{"join", Integer.valueOf(newRoom.getId()).toString()});
+            //若命令来源是玩家则在房间创建完毕后加入房间
+            if (Player.class.isInstance(commandSender)) {
+                commandJoin(commandSender, command, label, new String[]{"join", Integer.valueOf(newRoom.getId()).toString()});
+            }
         }
     }
 
@@ -144,6 +145,7 @@ public class CommandEk implements CommandExecutor {
                 commandSender.sendMessage(R.getLang("roomIsFull"));
             } else {
                 targetRoom.add((Player) commandSender);
+                commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
             }
         }
     }
@@ -163,8 +165,12 @@ public class CommandEk implements CommandExecutor {
 
         if (locatedRoom == null) {
             commandSender.sendMessage(R.getLang("notInARoom"));
-        } else if (!locatedRoom.remove((Player) commandSender)) {
-            commandSender.sendMessage(R.getLang("cannotExitInGame"));
+        } else {
+            if (locatedRoom.remove((Player) commandSender)) {
+                commandSender.sendMessage(R.getLang("exitRoomSuccessful"));
+            } else {
+                commandSender.sendMessage(R.getLang("cannotExitInGame"));
+            }
         }
     }
 
@@ -200,6 +206,7 @@ public class CommandEk implements CommandExecutor {
                 commandSender.sendMessage(R.getLang("cannotDelRoomWhichIsInGame"));
             } else {
                 Lobby.remove(targetRoom);
+                commandSender.sendMessage(R.getLang("delRoomSuccessful"));
             }
         }
     }

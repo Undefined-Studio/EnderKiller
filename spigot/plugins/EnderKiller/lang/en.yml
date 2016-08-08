@@ -29,3 +29,7 @@ searchFor: Search for{$arg}  #{$arg}
 noResultOf: No result of {$arg} #{$arg}
 useToGetPageN: Use {$command} [n] to get page n #{$command}
 noRoomYet: No room yet
+createRoomSuccessful: Create room successful
+joinRoom: Join room {$roomId} #{$roomId}
+exitRoomSuccessful: Exit room successful
+delRoomSuccessful: Delete room successful

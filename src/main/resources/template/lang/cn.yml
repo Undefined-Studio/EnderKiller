@@ -29,3 +29,7 @@ searchFor: 搜索{$arg}  #{$arg}
 noResultOf: 没有 {$arg} 的搜索结果 #{$arg}
 useToGetPageN: 使用 {$command} [n] 翻到第n页 #{$command}
 noRoomYet: 目前没有房间
+createRoomSuccessful: 创建房间成功
+joinRoom: 加入房间 {$roomId} #{$roomId}
+exitRoomSuccessful: 退出房间成功
+delRoomSuccessful: 删除房间成功
