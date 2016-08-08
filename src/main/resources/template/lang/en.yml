@@ -3,6 +3,8 @@ commandReload: Reload configuration
 commandCreate: Create a room
 commandList: Show all rooms
 commandJoin: Join a room
+commandExit: Exit form room
+commandDel: Delete a room
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -20,3 +22,4 @@ noSuchRoom: No such room
 roomIsFull: Room is full
 notInARoom: Not in a room
 cannotExitInGame: Cannot exit in game
+cannotDelRoomWhichIsInGame: Cannot del room which is inGame

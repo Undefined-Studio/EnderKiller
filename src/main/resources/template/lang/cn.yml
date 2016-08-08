@@ -3,6 +3,8 @@ commandReload: 重载配置文件
 commandCreate: 创建一个房间
 commandList: 显示所有房间
 commandJoin: 加入一个房间
+commandExit: 退出房间
+commandDel: 删除一个房间
 
 inGame: 游戏中
 waitingForStart: 等待开始
@@ -20,3 +22,4 @@ noSuchRoom: 没有这个房间
 roomIsFull: 房间已满
 notInARoom: 不在一个房间中
 cannotExitInGame: 不可在游戏中退出
+cannotDelRoomWhichIsInGame: 不能删除正在游戏的房间

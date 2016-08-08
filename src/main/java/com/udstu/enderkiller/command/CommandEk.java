@@ -1,6 +1,7 @@
 package com.udstu.enderkiller.command;
 
 import com.udstu.enderkiller.*;
+import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -51,9 +52,10 @@ public class CommandEk implements CommandExecutor {
         String mode;
         int modeInt;
         Room newRoom;
+        Room targetRoom;
 
         if (args.length < 2) {
-            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create <" + R.getLang("roomName") + "> <" + R.getLang("mode") + ">");
+            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create " + "<" + R.getLang("mode") + ">");
             return;
         }
         mode = args[1];
@@ -64,10 +66,23 @@ public class CommandEk implements CommandExecutor {
         }
         modeInt = Integer.parseInt(mode);
 
+        //若命令来源为玩家,则检测其是否已经在房间中
+        if (Player.class.isInstance(commandSender)) {
+            for (Room room : Lobby.getRoomList()) {
+                for (Player player : room.getPlayers()) {
+                    if (player == commandSender) {
+                        commandSender.sendMessage(R.getLang("alreadyInARoom"));
+                        return;
+                    }
+                }
+            }
+        }
+
         newRoom = new Room(commandSender.getName(), modeInt);
-        if (!Lobby.add(newRoom)) {
+        if (Lobby.isFull()) {
             commandSender.sendMessage(R.getLang("numberOfRoomsOutOfLimit"));
-            return;
+        } else {
+            Lobby.add(newRoom);
         }
 
         //若命令来源是玩家则在房间创建完毕后加入房间
@@ -119,8 +134,12 @@ public class CommandEk implements CommandExecutor {
 
         if (targetRoom == null) {
             commandSender.sendMessage(R.getLang("noSuchRoom"));
-        } else if (!targetRoom.add((Player) commandSender)) {
-            commandSender.sendMessage(R.getLang("roomIsFull"));
+        } else {
+            if (targetRoom.isFull()) {
+                commandSender.sendMessage(R.getLang("roomIsFull"));
+            } else {
+                targetRoom.add((Player) commandSender);
+            }
         }
     }
 
@@ -132,6 +151,7 @@ public class CommandEk implements CommandExecutor {
             for (Player player : room.getPlayers()) {
                 if (player == commandSender) {
                     locatedRoom = room;
+                    break;
                 }
             }
         }
@@ -140,6 +160,42 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("notInARoom"));
         } else if (!locatedRoom.remove((Player) commandSender)) {
             commandSender.sendMessage(R.getLang("cannotExitInGame"));
+        }
+    }
+
+    //删除房间 /ek del <roomId>
+    private void commandDel(CommandSender commandSender, Command command, String label, String[] args) {
+        String roomId;
+        int roomIdInt;
+        Room targetRoom = null;
+
+        if (args.length < 2) {
+            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " del <" + R.getLang("roomId") + ">");
+            return;
+        }
+        roomId = args[1];
+
+        if (!Util.isInteger(roomId)) {
+            commandSender.sendMessage(R.getLang("noSuchRoom"));
+            return;
+        }
+        roomIdInt = Integer.parseInt(roomId);
+
+        for (Room room : Lobby.getRoomList()) {
+            if (room.getId() == roomIdInt) {
+                targetRoom = room;
+                break;
+            }
+        }
+
+        if (targetRoom == null) {
+            commandSender.sendMessage(R.getLang("noSuchRoom"));
+        } else {
+            if (targetRoom.getStatus() != RoomStatus.waitingForStart) {
+                commandSender.sendMessage(R.getLang("cannotDelRoomWhichIsInGame"));
+            } else {
+                Lobby.remove(targetRoom);
+            }
         }
     }
 
@@ -164,6 +220,7 @@ public class CommandEk implements CommandExecutor {
                     return true;
                 }
                 case "join": {
+                    //若命令来源非玩家,则不执行
                     if (Player.class.isInstance(commandSender)) {
                         commandJoin(commandSender, command, label, args);
                     } else {
@@ -177,6 +234,10 @@ public class CommandEk implements CommandExecutor {
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }
+                    return true;
+                }
+                case "del": {
+                    commandDel(commandSender, command, label, args);
                     return true;
                 }
             }

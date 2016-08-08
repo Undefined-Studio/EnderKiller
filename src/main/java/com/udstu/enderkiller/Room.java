@@ -22,25 +22,19 @@ public class Room {
         players = new LinkedList<>();
         this.name = name;
         slot = mode;
-        id = Lobby.roomId++;
+        id = Lobby.getRoomIdStamp();
     }
 
-    public boolean add(Player player) {
-        if (players.size() < slot) {
-            players.add(player);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isFull() {
+        return !(players.size() < slot);
+    }
+
+    public void add(Player player) {
+        players.add(player);
     }
 
     public boolean remove(Player player) {
-        if (status != RoomStatus.inGame) {
-            players.remove(player);
-            return true;
-        } else {
-            return false;
-        }
+        return players.remove(player);
     }
 
     public List<Player> getPlayers() {
