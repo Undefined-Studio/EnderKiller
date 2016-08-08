@@ -36,7 +36,7 @@ public class Config {
         //目录不存在时创建目录
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                System.out.println("Cannot create directory " + dir);
+                mainClass.getLogger().warning("Cannot create directory " + dir);
             }
         }
         //读取jar包(Config.java所在的jar包)中的资源文件并写入对应路径的外部文件
@@ -47,7 +47,7 @@ public class Config {
             new FileOutputStream(file).write(buffer);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Cannot create file " + file.getAbsolutePath());
+            mainClass.getLogger().warning("Cannot create file " + file.getAbsolutePath());
             return false;
         } finally {
             try {
@@ -71,7 +71,7 @@ public class Config {
 
         //若配置文件不存在则创建
         if (!mainConfigFile.exists()) {
-            System.out.println("Create config.yml from template");
+            mainClass.getLogger().info("Create config.yml from template");
             if (!createFileFromJar(mainConfigPath)) {
                 return false;
             }
@@ -83,7 +83,7 @@ public class Config {
         langConfigPath = Config.langConfigPath + mainConfig.getString("lang") + ".yml";
         langConfigFIle = new File(mainClass.getDataFolder(), langConfigPath);
         if (!langConfigFIle.exists()) {
-            System.out.println("Create language file from template");
+            mainClass.getLogger().info("Create language file from template");
             if (!createFileFromJar(langConfigPath)) {
                 return false;
             }

@@ -53,7 +53,6 @@ public class CommandEk implements CommandExecutor {
         String mode;
         int modeInt;
         Room newRoom;
-        Room targetRoom;
 
         if (args.length < 2) {
             commandSender.sendMessage(R.getLang("usage") + " /" + label + " create " + "<" + R.getLang("mode") + ">");
@@ -85,6 +84,7 @@ public class CommandEk implements CommandExecutor {
         } else {
             Lobby.add(newRoom);
             commandSender.sendMessage(R.getLang("createRoomSuccessful"));
+            R.getMainClass().getLogger().info(commandSender.getName() + " created room " + newRoom.getId());
 
             //若命令来源是玩家则在房间创建完毕后加入房间
             if (Player.class.isInstance(commandSender)) {
@@ -146,6 +146,7 @@ public class CommandEk implements CommandExecutor {
             } else {
                 targetRoom.add((Player) commandSender);
                 commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
+                R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
             }
         }
     }
@@ -168,6 +169,7 @@ public class CommandEk implements CommandExecutor {
         } else {
             if (locatedRoom.remove((Player) commandSender)) {
                 commandSender.sendMessage(R.getLang("exitRoomSuccessful"));
+                R.getMainClass().getLogger().info(commandSender.getName() + " exited room " + locatedRoom.getId());
             } else {
                 commandSender.sendMessage(R.getLang("cannotExitInGame"));
             }
@@ -207,6 +209,7 @@ public class CommandEk implements CommandExecutor {
             } else {
                 Lobby.remove(targetRoom);
                 commandSender.sendMessage(R.getLang("delRoomSuccessful"));
+                R.getMainClass().getLogger().info(commandSender.getName() + " deleted room " + targetRoom.getId());
             }
         }
     }
