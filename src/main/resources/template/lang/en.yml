@@ -23,3 +23,9 @@ roomIsFull: Room is full
 notInARoom: Not in a room
 cannotExitInGame: Cannot exit in game
 cannotDelRoomWhichIsInGame: Cannot del room which is inGame
+search: Search
+index: Index
+searchFor: Search for{$arg}  #{$arg}
+noResultOf: No result of {$arg} #{$arg}
+useToGetPageN: Use {$command} [n] to get page n #{$command}
+noRoomYet: No room yet

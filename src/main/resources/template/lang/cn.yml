@@ -23,3 +23,9 @@ roomIsFull: 房间已满
 notInARoom: 不在一个房间中
 cannotExitInGame: 不可在游戏中退出
 cannotDelRoomWhichIsInGame: 不能删除正在游戏的房间
+search: 搜索
+index: 索引
+searchFor: 搜索{$arg}  #{$arg}
+noResultOf: 没有 {$arg} 的搜索结果 #{$arg}
+useToGetPageN: 使用 {$command} [n] 翻到第n页 #{$command}
+noRoomYet: 目前没有房间

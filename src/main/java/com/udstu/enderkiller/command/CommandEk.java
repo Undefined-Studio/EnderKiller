@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ public class CommandEk implements CommandExecutor {
             }
         }
 
-        commandSender.sendMessage(helpList.toArray(new String[helpList.size()]));
+        Util.sendMessages(commandSender, "EkHelp", R.getLang("useToGetPageN").replace("{$command}", "/" + label + " help"), helpList, Arrays.copyOfRange(args, 1, args.length));
     }
 
     //重载配置文件 /ek reload
@@ -55,7 +56,7 @@ public class CommandEk implements CommandExecutor {
         Room targetRoom;
 
         if (args.length < 2) {
-            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " create " + "<" + R.getLang("mode") + ">");
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " create " + "<" + R.getLang("mode") + ">");
             return;
         }
         mode = args[1];
@@ -99,7 +100,11 @@ public class CommandEk implements CommandExecutor {
             roomInfoList.add(room.getId() + " " + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
         }
 
-        commandSender.sendMessage(roomInfoList.toArray(new String[roomInfoList.size()]));
+        if (roomInfoList.size() == 0) {
+            commandSender.sendMessage(R.getLang("noRoomYet"));
+        } else {
+            Util.sendMessages(commandSender, "EkRooms", R.getLang("useToGetPageN").replace("{$command}", "/" + label + " list"), roomInfoList, Arrays.copyOfRange(args, 1, args.length));
+        }
     }
 
     //加入房间 /ek join <roomId>
@@ -109,7 +114,7 @@ public class CommandEk implements CommandExecutor {
         Room targetRoom = null;
 
         if (args.length < 2) {
-            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " join <" + R.getLang("roomId") + ">");
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " join <" + R.getLang("roomId") + ">");
             return;
         }
         roomId = args[1];
@@ -170,7 +175,7 @@ public class CommandEk implements CommandExecutor {
         Room targetRoom = null;
 
         if (args.length < 2) {
-            commandSender.sendMessage(R.getLang("usage") + " " + "/" + label + " del <" + R.getLang("roomId") + ">");
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " del <" + R.getLang("roomId") + ">");
             return;
         }
         roomId = args[1];
