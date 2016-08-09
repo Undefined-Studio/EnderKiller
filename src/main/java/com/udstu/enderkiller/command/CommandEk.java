@@ -45,6 +45,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("reloadedConfiguration"));
         } else {
             commandSender.sendMessage("An error occurred while loading configuration");
+            R.getMainClass().getLogger().warning("Cannot load configuration");
         }
     }
 
@@ -68,13 +69,9 @@ public class CommandEk implements CommandExecutor {
 
         //若命令来源为玩家,则检测其是否已经在房间中
         if (Player.class.isInstance(commandSender)) {
-            for (Room room : Lobby.getRoomList()) {
-                for (Player player : room.getPlayers()) {
-                    if (player == commandSender) {
-                        commandSender.sendMessage(R.getLang("alreadyInARoom"));
-                        return;
-                    }
-                }
+            if (Util.searchPlayer((Player) commandSender) != null) {
+                commandSender.sendMessage(R.getLang("alreadyInARoom"));
+                return;
             }
         }
 
@@ -111,8 +108,7 @@ public class CommandEk implements CommandExecutor {
     //加入房间 /ek join <roomId>
     private void commandJoin(CommandSender commandSender, Command command, String label, String[] args) {
         String roomId;
-        int roomIdInt;
-        Room targetRoom = null;
+        Room targetRoom;
 
         if (args.length < 2) {
             commandSender.sendMessage(R.getLang("usage") + " /" + label + " join <" + R.getLang("roomId") + ">");
@@ -120,23 +116,14 @@ public class CommandEk implements CommandExecutor {
         }
         roomId = args[1];
 
-        if (!Util.isInteger(roomId)) {
-            commandSender.sendMessage(R.getLang("noSuchRoom"));
+        //若已在房间中则结束命令
+        if (Util.searchPlayer((Player) commandSender) != null) {
+            commandSender.sendMessage(R.getLang("alreadyInARoom"));
             return;
         }
-        roomIdInt = Integer.parseInt(roomId);
 
-        for (Room room : Lobby.getRoomList()) {
-            if (room.getId() == roomIdInt) {
-                targetRoom = room;
-            }
-            for (Player player : room.getPlayers()) {
-                if (player == commandSender) {
-                    commandSender.sendMessage(R.getLang("alreadyInARoom"));
-                    return;
-                }
-            }
-        }
+        //搜寻目标房间
+        targetRoom = Util.searchRoom(roomId);
 
         if (targetRoom == null) {
             commandSender.sendMessage(R.getLang("noSuchRoom"));
@@ -153,16 +140,9 @@ public class CommandEk implements CommandExecutor {
 
     //退出房间 /ek exit
     private void commandExit(CommandSender commandSender, Command command, String label, String[] args) {
-        Room locatedRoom = null;
+        Room locatedRoom;
 
-        for (Room room : Lobby.getRoomList()) {
-            for (Player player : room.getPlayers()) {
-                if (player == commandSender) {
-                    locatedRoom = room;
-                    break;
-                }
-            }
-        }
+        locatedRoom = Util.searchPlayer((Player) commandSender);
 
         if (locatedRoom == null) {
             commandSender.sendMessage(R.getLang("notInARoom"));
@@ -179,8 +159,7 @@ public class CommandEk implements CommandExecutor {
     //删除房间 /ek del <roomId>
     private void commandDel(CommandSender commandSender, Command command, String label, String[] args) {
         String roomId;
-        int roomIdInt;
-        Room targetRoom = null;
+        Room targetRoom;
 
         if (args.length < 2) {
             commandSender.sendMessage(R.getLang("usage") + " /" + label + " del <" + R.getLang("roomId") + ">");
@@ -188,18 +167,7 @@ public class CommandEk implements CommandExecutor {
         }
         roomId = args[1];
 
-        if (!Util.isInteger(roomId)) {
-            commandSender.sendMessage(R.getLang("noSuchRoom"));
-            return;
-        }
-        roomIdInt = Integer.parseInt(roomId);
-
-        for (Room room : Lobby.getRoomList()) {
-            if (room.getId() == roomIdInt) {
-                targetRoom = room;
-                break;
-            }
-        }
+        targetRoom = Util.searchRoom(roomId);
 
         if (targetRoom == null) {
             commandSender.sendMessage(R.getLang("noSuchRoom"));

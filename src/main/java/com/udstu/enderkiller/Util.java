@@ -1,6 +1,7 @@
 package com.udstu.enderkiller;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,5 +114,41 @@ public class Util {
         }
 
         commandSender.sendMessage(transToPaginatedMessages(title, header, messageList, page));
+    }
+
+    public static Room searchPlayer(Player targetPlayer) {
+        Room targetRoom;
+
+        for (Room room : Lobby.getRoomList()) {
+            for (Player player : room.getPlayers()) {
+                if (player == targetPlayer) {
+                    targetRoom = room;
+                    return targetRoom;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static Room searchRoom(int roomId) {
+        Room targetRoom;
+
+        for (Room room : Lobby.getRoomList()) {
+            if (room.getId() == roomId) {
+                targetRoom = room;
+                return targetRoom;
+            }
+        }
+
+        return null;
+    }
+
+    public static Room searchRoom(String roomIdStr) {
+        if (!Util.isInteger(roomIdStr)) {
+            return null;
+        } else {
+            return searchRoom(Integer.parseInt(roomIdStr));
+        }
     }
 }
