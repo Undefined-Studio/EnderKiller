@@ -32,7 +32,7 @@ public class CommandEk implements CommandExecutor {
             methodName = method.getName();
             matcher = pattern.matcher(methodName);
             if (matcher.matches()) {
-                helpList.add("/" + label + " " + methodName.substring("command".length()).toLowerCase() + " " + R.getLang(methodName));
+                helpList.add("§6/" + label + " " + methodName.substring("command".length()).toLowerCase() + ": §f" + R.getLang(methodName));
             }
         }
 
@@ -95,7 +95,7 @@ public class CommandEk implements CommandExecutor {
         List<String> roomInfoList = new ArrayList<>();
 
         for (Room room : Lobby.getRoomList()) {
-            roomInfoList.add(room.getId() + " " + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
+            roomInfoList.add("§e" + room.getId() + " §f" + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
         }
 
         if (roomInfoList.size() == 0) {

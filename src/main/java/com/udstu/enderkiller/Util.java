@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class Util {
     //将准备输出的内容分页并返回对应页内容
     private static String[] transToPaginatedMessages(String title, String header, List<String> messageList, int page) {
+        header = "§7" + header;
         messageList.add(0, header);
         int row = 9;    //聊天栏未展开时能显示10行,实际内容9行
         int totalMessage = messageList.size();
@@ -27,7 +28,7 @@ public class Util {
         //页码越界时取对应边界值
         page = page < 1 ? 1 : (page > totalPage ? totalPage : page);
 
-        messageInPage.add("---------- " + title + " (" + page + "/" + totalPage + ") --------------------");
+        messageInPage.add("§e---------- §f" + title + " (" + page + "/" + totalPage + ")§e --------------------");
         try {
             start = (page - 1) * row;
             end = start + row;
