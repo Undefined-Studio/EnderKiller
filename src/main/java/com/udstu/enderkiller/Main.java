@@ -1,23 +1,24 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.command.CommandEk;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created by yst on 2016/7/31.
- * Spigot main class
+ * EnderKiller main class
  */
-public class Main extends JavaPlugin
-{
+public final class Main extends JavaPlugin {
     @Override
-    public void onEnable()
-    {
-        super.onEnable();
+    public void onEnable() {
+        this.getCommand("ek").setExecutor(new CommandEk());
+
+        //传入主类(指本类)引用至Config,并执行一次配置文件载入
+        Config.setMainClass(this);
+        Config.load();
     }
 
     @Override
-    public void onDisable()
-    {
-        super.onDisable();
+    public void onDisable() {
+
     }
 }
-
