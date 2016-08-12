@@ -51,7 +51,7 @@ public class Config {
             return false;
         } finally {
             try {
-                inputStream.close();
+                inputStream.close();    //关闭流本身会有IOException
             } catch (Exception e) {
                 e.printStackTrace();
             }

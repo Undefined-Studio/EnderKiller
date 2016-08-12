@@ -117,6 +117,7 @@ public class Util {
         commandSender.sendMessage(transToPaginatedMessages(title, header, messageList, page));
     }
 
+    //搜索玩家是否在房间中,是则返回房间指针,否则为null
     public static Room searchPlayer(Player targetPlayer) {
         Room targetRoom;
 
@@ -132,6 +133,7 @@ public class Util {
         return null;
     }
 
+    //搜索房间
     public static Room searchRoom(int roomId) {
         Room targetRoom;
 
@@ -145,6 +147,7 @@ public class Util {
         return null;
     }
 
+    //搜索房间,使用字符串作为参数
     public static Room searchRoom(String roomIdStr) {
         if (!Util.isInteger(roomIdStr)) {
             return null;
