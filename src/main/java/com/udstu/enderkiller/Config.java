@@ -16,7 +16,7 @@ public class Config {
     private static YamlConfiguration mainConfig = null;
     private static String mainConfigPath = "config.yml";
     private static YamlConfiguration langConfig = null;
-    private static String langConfigPath = "lang" + File.separator;
+    private static String langConfigPath = "lang/"; //统一使用unix路径,在windows系统运行时,java8将自动转换路径
     private static String templateResourcePath = "/template/";    //指在jar中的路径
 
     //传入R中
