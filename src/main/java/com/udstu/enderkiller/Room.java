@@ -1,5 +1,6 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.entity.Player;
 
@@ -11,34 +12,41 @@ import java.util.List;
  * Room of EnderKiller
  */
 public class Room {
-    private List<Player> players;
+    private List<GameCharacter> gameCharacters;
     private String name;
     private int slot;
     private int id;
-    private RoomStatus status = RoomStatus.waitingForStart;
+    private RoomStatus status;
 
-    //模式以游戏人数命名,例如12人局则传入12,此时最大人数12人
+    //模式以游戏人数命名,例如12人局则传入12,此时最大人数为12人
     public Room(String name, int mode) {
-        players = new LinkedList<>();
+        gameCharacters = new LinkedList<>();
         this.name = name;
         slot = mode;
         id = Lobby.getRoomIdStamp();
+        status = RoomStatus.waitingForStart;
     }
 
     public boolean isFull() {
-        return !(players.size() < slot);
+        return !(gameCharacters.size() < slot);
     }
 
-    public void add(Player player) {
-        players.add(player);
+    public void add(GameCharacter gameCharacter) {
+        gameCharacters.add(gameCharacter);
     }
 
     public boolean remove(Player player) {
-        return players.remove(player);
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getPlayer() == player) {
+                return gameCharacters.remove(gameCharacter);
+            }
+        }
+
+        return false;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public List<GameCharacter> getGameCharacters() {
+        return gameCharacters;
     }
 
     public String getName() {

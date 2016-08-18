@@ -7,20 +7,20 @@ import org.bukkit.entity.Player;
  * Created by czp on 16-8-12.
  * 所有职业的父类
  */
-public class Character {
+public class GameCharacter {
     protected Player player = null;
     protected Alignment alignment = null;
 
-    public Character() {
+    public GameCharacter() {
 
     }
 
-    public Character(Player player) {
+    public GameCharacter(Player player) {
         this.player = player;
     }
 
-    public Character(Character character, Alignment alignment) {
-        this.player = character.getPlayer();
+    public GameCharacter(GameCharacter gameCharacter, Alignment alignment) {
+        this.player = gameCharacter.getPlayer();
         this.alignment = alignment;
     }
 

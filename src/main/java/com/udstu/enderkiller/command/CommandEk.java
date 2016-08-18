@@ -1,6 +1,7 @@
 package com.udstu.enderkiller.command;
 
 import com.udstu.enderkiller.*;
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -95,7 +96,7 @@ public class CommandEk implements CommandExecutor {
         List<String> roomInfoList = new ArrayList<>();
 
         for (Room room : Lobby.getRoomList()) {
-            roomInfoList.add("§e" + room.getId() + " §f" + room.getName() + " " + room.getPlayers().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
+            roomInfoList.add("§e" + room.getId() + " §f" + room.getName() + " " + room.getGameCharacters().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
         }
 
         if (roomInfoList.size() == 0) {
@@ -131,7 +132,7 @@ public class CommandEk implements CommandExecutor {
             if (targetRoom.isFull()) {
                 commandSender.sendMessage(R.getLang("roomIsFull"));
             } else {
-                targetRoom.add((Player) commandSender);
+                targetRoom.add(new GameCharacter((Player) commandSender));
                 commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
                 R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
             }

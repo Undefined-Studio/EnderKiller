@@ -1,5 +1,6 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -122,8 +123,8 @@ public class Util {
         Room targetRoom;
 
         for (Room room : Lobby.getRoomList()) {
-            for (Player player : room.getPlayers()) {
-                if (player == targetPlayer) {
+            for (GameCharacter gameCharacter : room.getGameCharacters()) {
+                if (gameCharacter.getPlayer() == targetPlayer) {
                     targetRoom = room;
                     return targetRoom;
                 }
