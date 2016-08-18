@@ -31,6 +31,27 @@ public class Room {
         return !(gameCharacters.size() < slot);
     }
 
+    //是否存在玩家
+    public boolean isExistPlayer(Player player) {
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getPlayer().getName().equals(player.getName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isExistPlayer(String playerName) {
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getPlayer().getName().equals(playerName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void add(GameCharacter gameCharacter) {
         gameCharacters.add(gameCharacter);
     }
@@ -43,6 +64,27 @@ public class Room {
         }
 
         return false;
+    }
+
+    public GameCharacter getGameCharacter(Player player) {
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getPlayer().getName().equals(player.getName())) {
+                return gameCharacter;
+            }
+        }
+
+        return null;
+    }
+
+    //获取对应玩家的角色指针
+    public GameCharacter getGameCharacter(String playerName) {
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getPlayer().getName().equals(playerName)) {
+                return gameCharacter;
+            }
+        }
+
+        return null;
     }
 
     public List<GameCharacter> getGameCharacters() {

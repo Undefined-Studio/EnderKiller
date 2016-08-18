@@ -1,6 +1,5 @@
 package com.udstu.enderkiller;
 
-import com.udstu.enderkiller.character.extend.GameCharacter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -120,14 +119,20 @@ public class Util {
 
     //搜索玩家是否在房间中,是则返回房间指针,否则为null
     public static Room searchPlayer(Player targetPlayer) {
-        Room targetRoom;
-
         for (Room room : Lobby.getRoomList()) {
-            for (GameCharacter gameCharacter : room.getGameCharacters()) {
-                if (gameCharacter.getPlayer().getName().equals(targetPlayer.getName())) {
-                    targetRoom = room;
-                    return targetRoom;
-                }
+            if (room.isExistPlayer(targetPlayer)) {
+                return room;
+            }
+        }
+
+        return null;
+    }
+
+    //搜索玩家是否在房间中,以玩家名作为参数
+    public static Room searchPlayer(String playerName) {
+        for (Room room : Lobby.getRoomList()) {
+            if (room.isExistPlayer(playerName)) {
+                return room;
             }
         }
 
