@@ -1,7 +1,6 @@
 package com.udstu.enderkiller;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,17 +114,6 @@ public class Util {
         }
 
         commandSender.sendMessage(transToPaginatedMessages(title, header, messageList, page));
-    }
-
-    //搜索玩家是否在房间中,是则返回房间指针,否则为null
-    public static Room searchPlayer(Player targetPlayer) {
-        for (Room room : Lobby.getRoomList()) {
-            if (room.isExistPlayer(targetPlayer)) {
-                return room;
-            }
-        }
-
-        return null;
     }
 
     //搜索玩家是否在房间中,以玩家名作为参数

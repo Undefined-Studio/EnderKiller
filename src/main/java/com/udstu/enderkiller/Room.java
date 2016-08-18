@@ -66,16 +66,6 @@ public class Room {
         return false;
     }
 
-    public GameCharacter getGameCharacter(Player player) {
-        for (GameCharacter gameCharacter : gameCharacters) {
-            if (gameCharacter.getPlayer().getName().equals(player.getName())) {
-                return gameCharacter;
-            }
-        }
-
-        return null;
-    }
-
     //获取对应玩家的角色指针
     public GameCharacter getGameCharacter(String playerName) {
         for (GameCharacter gameCharacter : gameCharacters) {

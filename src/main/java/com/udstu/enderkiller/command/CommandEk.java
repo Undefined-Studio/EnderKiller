@@ -70,7 +70,7 @@ public class CommandEk implements CommandExecutor {
 
         //若命令来源为玩家,则检测其是否已经在房间中
         if (Player.class.isInstance(commandSender)) {
-            if (Util.searchPlayer((Player) commandSender) != null) {
+            if (Util.searchPlayer(commandSender.getName()) != null) {
                 commandSender.sendMessage(R.getLang("alreadyInARoom"));
                 return;
             }
@@ -118,7 +118,7 @@ public class CommandEk implements CommandExecutor {
         roomId = args[1];
 
         //若已在房间中则结束命令
-        if (Util.searchPlayer((Player) commandSender) != null) {
+        if (Util.searchPlayer(commandSender.getName()) != null) {
             commandSender.sendMessage(R.getLang("alreadyInARoom"));
             return;
         }
@@ -143,7 +143,7 @@ public class CommandEk implements CommandExecutor {
     private void commandExit(CommandSender commandSender, Command command, String label, String[] args) {
         Room locatedRoom;
 
-        locatedRoom = Util.searchPlayer((Player) commandSender);
+        locatedRoom = Util.searchPlayer(commandSender.getName());
 
         if (locatedRoom == null) {
             commandSender.sendMessage(R.getLang("notInARoom"));
