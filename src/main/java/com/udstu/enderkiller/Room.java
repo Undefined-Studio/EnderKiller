@@ -37,7 +37,7 @@ public class Room {
 
     public boolean remove(Player player) {
         for (GameCharacter gameCharacter : gameCharacters) {
-            if (gameCharacter.getPlayer() == player) {
+            if (gameCharacter.getPlayer().getName().equals(player.getName())) {
                 return gameCharacters.remove(gameCharacter);
             }
         }

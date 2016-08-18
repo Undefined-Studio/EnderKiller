@@ -124,7 +124,7 @@ public class Util {
 
         for (Room room : Lobby.getRoomList()) {
             for (GameCharacter gameCharacter : room.getGameCharacters()) {
-                if (gameCharacter.getPlayer() == targetPlayer) {
+                if (gameCharacter.getPlayer().getName().equals(targetPlayer.getName())) {
                     targetRoom = room;
                     return targetRoom;
                 }
