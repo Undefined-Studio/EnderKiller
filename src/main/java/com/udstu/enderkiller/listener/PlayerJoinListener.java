@@ -23,6 +23,7 @@ public class PlayerJoinListener implements Listener {
         targetRoom = Util.searchPlayer(playerName);
         if (targetRoom != null) {
             targetRoom.getGameCharacter(playerName).setPlayer(player);
+            targetRoom.updateScoreBoard();
         }
     }
 }
