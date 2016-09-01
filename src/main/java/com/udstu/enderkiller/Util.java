@@ -2,9 +2,11 @@ package com.udstu.enderkiller;
 
 import org.bukkit.command.CommandSender;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,5 +150,30 @@ public class Util {
         } else {
             return searchRoom(Integer.parseInt(roomIdStr));
         }
+    }
+
+    //随机排列数组
+    @SuppressWarnings("unchecked")
+    public static Object randomSort(Object[] objects) {
+        int length = objects.length;
+
+        try {
+            Object result = Array.newInstance(objects.getClass().getComponentType(), length);
+
+            Random random = new Random();
+            for (int i = 0; i < length; i++) {
+                // 得到一个位置
+                int r = random.nextInt(length - i);
+                // 得到那个位置的数值
+                Array.set(result, i, objects[r]);
+                // 将最后一个未用的数字放到这里
+                objects[r] = objects[length - 1 - i];
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

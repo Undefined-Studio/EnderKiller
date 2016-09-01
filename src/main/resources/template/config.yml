@@ -1,2 +1,7 @@
 lang: en  #Support en,cn
 maxRooms: 5
+spawnWorldSeed: 759242905499401623
+worldNamePrefix: enderkill_world
+spawnWorldName: enderkill_world_spawn
+initMoneyType: EMERALD
+initMoneyAmount: 30

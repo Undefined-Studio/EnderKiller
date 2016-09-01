@@ -5,9 +5,24 @@ commandList: 显示所有房间
 commandJoin: 加入一个房间
 commandExit: 退出房间
 commandDel: 删除一个房间
+commandStart: 开始游戏
 
 inGame: 游戏中
 waitingForStart: 等待开始
+
+explorer: 探险家
+lurker: 潜伏者
+
+ordinariness: 普通人
+warlock: 巫师
+escapee: 逃犯
+enchanter: 幻术师
+apprentice: 学徒
+lawyer: 律师
+priest: 牧师
+detective: 侦探
+teacher: 贤者
+fighter: 斗士
 
 usage: 用法
 modeAllowed: 允许的模式
@@ -33,3 +48,12 @@ createRoomSuccessful: 创建房间成功
 joinRoom: 加入房间 {$roomId} #{$roomId}
 exitRoomSuccessful: 退出房间成功
 delRoomSuccessful: 删除房间成功
+roomNotFull: 房间未满
+initializingGame: 正在初始化游戏
+loadingWorld: 正在加载世界
+teleporting: 正在传送
+allocatingOccupation: 正在分配职业
+yourAlignment: 你的阵营
+yourOccupation: 你的职业
+givingInitMoney: 给予初始金钱
+youGet: 你得到了

@@ -5,9 +5,24 @@ commandList: Show all rooms
 commandJoin: Join a room
 commandExit: Exit form room
 commandDel: Delete a room
+commandStart: Start game
 
 inGame: InGame
 waitingForStart: WaitingForStart
+
+explorer: Explorer
+lurker: Lurker
+
+ordinariness: Ordinariness
+warlock: Warlock
+escapee: Escapee
+enchanter: Enchanter
+apprentice: Apprentice
+lawyer: Lawyer
+priest: Priest
+detective: Detective
+teacher: Teacher
+fighter: Fighter
 
 usage: Usage
 modeAllowed: Mode allowed
@@ -33,3 +48,12 @@ createRoomSuccessful: Create room successful
 joinRoom: Join room {$roomId} #{$roomId}
 exitRoomSuccessful: Exit room successful
 delRoomSuccessful: Delete room successful
+roomNotFull: Room not full
+initializingGame: Initializing game
+loadingWorld: Loading world
+teleporting: Teleporting
+allocatingOccupation: Allocating occupation
+yourAlignment: Your alignment
+yourOccupation: Your occupation
+givingInitMoney: Giving init money
+youGet: You get

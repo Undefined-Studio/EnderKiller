@@ -96,7 +96,7 @@ public class CommandEk implements CommandExecutor {
         List<String> roomInfoList = new ArrayList<>();
 
         for (Room room : Lobby.getRoomList()) {
-            roomInfoList.add("§e" + room.getId() + " §f" + room.getName() + " " + room.getGameCharacters().size() + "/" + room.getSlot() + " " + room.getStatus().toString());
+            roomInfoList.add("§e" + room.getId() + " §f" + room.getName() + " " + room.getGameCharacters().size() + "/" + room.getSlot() + " " + room.getRoomStatus().toString());
         }
 
         if (roomInfoList.size() == 0) {
@@ -173,12 +173,27 @@ public class CommandEk implements CommandExecutor {
         if (targetRoom == null) {
             commandSender.sendMessage(R.getLang("noSuchRoom"));
         } else {
-            if (targetRoom.getStatus() != RoomStatus.waitingForStart) {
+            if (targetRoom.getRoomStatus() != RoomStatus.waitingForStart) {
                 commandSender.sendMessage(R.getLang("cannotDelRoomWhichIsInGame"));
             } else {
                 Lobby.remove(targetRoom);
                 commandSender.sendMessage(R.getLang("delRoomSuccessful"));
                 R.getMainClass().getLogger().info(commandSender.getName() + " deleted room " + targetRoom.getId());
+            }
+        }
+    }
+
+    //开始游戏 /ek start
+    private void commandStart(CommandSender commandSender, Command command, String label, String[] args) {
+        Room locatedRoom;
+
+        locatedRoom = Util.searchPlayer(commandSender.getName());
+
+        if (locatedRoom == null) {
+            commandSender.sendMessage(R.getLang("notInARoom"));
+        } else {
+            if (!locatedRoom.startGame()) {
+                commandSender.sendMessage(R.getLang("roomNotFull"));
             }
         }
     }
@@ -222,6 +237,14 @@ public class CommandEk implements CommandExecutor {
                 }
                 case "del": {
                     commandDel(commandSender, command, label, args);
+                    return true;
+                }
+                case "start": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandStart(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
                     return true;
                 }
             }

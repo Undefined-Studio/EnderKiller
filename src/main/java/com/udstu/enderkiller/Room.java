@@ -2,6 +2,8 @@ package com.udstu.enderkiller;
 
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.RoomStatus;
+import com.udstu.enderkiller.game.Game8;
+import com.udstu.enderkiller.game.extend.Game;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -20,7 +22,7 @@ public class Room {
     private String name;
     private int slot;
     private int id;
-    private RoomStatus status = null;
+    private RoomStatus roomStatus = null;
     private Scoreboard scoreboard = null;
     private Objective objective = null;
 
@@ -30,7 +32,7 @@ public class Room {
         this.name = name;
         slot = mode;
         id = Lobby.getRoomIdStamp();
-        status = RoomStatus.waitingForStart;
+        roomStatus = RoomStatus.waitingForStart;
 
         scoreboard = R.getScoreboardManager().getNewScoreboard();
     }
@@ -40,16 +42,6 @@ public class Room {
     }
 
     //是否存在玩家
-    public boolean isExistPlayer(Player player) {
-        for (GameCharacter gameCharacter : gameCharacters) {
-            if (gameCharacter.getPlayer().getName().equals(player.getName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public boolean isExistPlayer(String playerName) {
         for (GameCharacter gameCharacter : gameCharacters) {
             if (gameCharacter.getPlayer().getName().equals(playerName)) {
@@ -89,6 +81,7 @@ public class Room {
         return null;
     }
 
+    //更新计分板
     public void updateScoreBoard() {
         Player player;
         String playerName;
@@ -117,8 +110,34 @@ public class Room {
         }
     }
 
-    public void addToScoreBoard(String playerName) {
+    //开始游戏
+    public boolean startGame() {
+        Thread thread;
+        Game game = null;
 
+        //房间未满或不为等待开始状态时无法开始游戏
+//        if (!isFull() || roomStatus != RoomStatus.waitingForStart) {
+//            return false;
+//        }
+
+        roomStatus = RoomStatus.inGame;
+
+        switch (slot) {
+            case 8: {
+                game = new Game8(this);
+            }
+            break;
+        }
+
+        game.start();
+
+        return true;
+    }
+
+    public void broadcast(String message) {
+        for (GameCharacter gameCharacter : gameCharacters) {
+            gameCharacter.getPlayer().sendMessage(message);
+        }
     }
 
     public List<GameCharacter> getGameCharacters() {
@@ -137,7 +156,7 @@ public class Room {
         return id;
     }
 
-    public RoomStatus getStatus() {
-        return status;
+    public RoomStatus getRoomStatus() {
+        return roomStatus;
     }
 }
