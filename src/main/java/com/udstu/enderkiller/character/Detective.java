@@ -11,4 +11,14 @@ public class Detective extends GameCharacter {
     public Detective(GameCharacter gameCharacter, Alignment alignment) {
         super(gameCharacter, alignment);
     }
+
+    @Override
+    public void nextDay() {
+
+    }
+
+    @Override
+    public void nextNight() {
+
+    }
 }

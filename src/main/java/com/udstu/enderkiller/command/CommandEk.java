@@ -198,6 +198,24 @@ public class CommandEk implements CommandExecutor {
         }
     }
 
+    //传送至当前游戏的主世界 /ek tp
+    private void commandTp(CommandSender commandSender, Command command, String label, String[] args) {
+        Room locatedRoom;
+
+        locatedRoom = Util.searchPlayer(commandSender.getName());
+
+        if (locatedRoom == null) {
+            commandSender.sendMessage(R.getLang("notInARoom"));
+        } else {
+            if (locatedRoom.getRoomStatus() == RoomStatus.inGame) {
+                commandSender.sendMessage(R.getLang("teleporting"));
+                ((Player) commandSender).teleport(locatedRoom.getGame().getMainWorldSpawnLocation());
+            } else {
+                commandSender.sendMessage(R.getLang("gameNotStart"));
+            }
+        }
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -242,6 +260,14 @@ public class CommandEk implements CommandExecutor {
                 case "start": {
                     if (Player.class.isInstance(commandSender)) {
                         commandStart(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "tp": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandTp(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }

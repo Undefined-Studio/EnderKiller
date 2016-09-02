@@ -6,6 +6,7 @@ commandJoin: Join a room
 commandExit: Exit form room
 commandDel: Delete a room
 commandStart: Start game
+commandTp: Teleport to main world of current game
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -31,7 +32,7 @@ reloadedConfiguration: Reloaded configuration
 numberOfRoomsOutOfLimit: Number of rooms out of limit
 mode: mode
 onlyPlayerCanUseThisCommand: Only player can use this command
-roomId: roomId
+roomId: RoomId
 alreadyInARoom: Already in a room
 noSuchRoom: No such room
 roomIsFull: Room is full
@@ -57,3 +58,6 @@ yourAlignment: Your alignment
 yourOccupation: Your occupation
 givingInitMoney: Giving init money
 youGet: You get
+dayTimeCome: Day time come
+nightTimeCome: Night time come
+gameNotStart: Game not start

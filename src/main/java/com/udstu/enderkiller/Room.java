@@ -25,6 +25,7 @@ public class Room {
     private RoomStatus roomStatus = null;
     private Scoreboard scoreboard = null;
     private Objective objective = null;
+    private Game game = null;
 
     //模式以游戏人数命名,例如12人局则传入12,此时最大人数为12人
     public Room(String name, int mode) {
@@ -81,17 +82,23 @@ public class Room {
         return null;
     }
 
+    //TODO 每个玩家独立的scoreboard
     //更新计分板
     public void updateScoreBoard() {
         Player player;
         String playerName;
+        String objectiveDisplayName = "";
 
         if (objective != null) {
             objective.unregister();
         }
         objective = scoreboard.registerNewObjective("CharacterList", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(R.getLang("roomId") + " " + ChatColor.YELLOW + id);
+        objectiveDisplayName += R.getLang("roomId") + " " + ChatColor.YELLOW + id;
+        if (game != null) {
+            objectiveDisplayName += ChatColor.RESET + ", " + "Day " + ChatColor.YELLOW + game.getDay();
+        }
+        objective.setDisplayName(objectiveDisplayName);
 
         for (int i = 1; i <= gameCharacters.size(); i++) {
             player = gameCharacters.get(i - 1).getPlayer();
@@ -112,9 +119,6 @@ public class Room {
 
     //开始游戏
     public boolean startGame() {
-        Thread thread;
-        Game game = null;
-
         //房间未满或不为等待开始状态时无法开始游戏
 //        if (!isFull() || roomStatus != RoomStatus.waitingForStart) {
 //            return false;
@@ -158,5 +162,13 @@ public class Room {
 
     public RoomStatus getRoomStatus() {
         return roomStatus;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

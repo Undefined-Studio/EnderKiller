@@ -24,6 +24,15 @@ public class GameCharacter {
         this.alignment = alignment;
     }
 
+    //这两个当抽象方法使用
+    public void nextDay() {
+
+    }
+
+    public void nextNight() {
+
+    }
+
     public Player getPlayer() {
         return player;
     }

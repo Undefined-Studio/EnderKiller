@@ -11,4 +11,14 @@ public class Ordinariness extends GameCharacter {
     public Ordinariness(GameCharacter gameCharacter, Alignment alignment) {
         super(gameCharacter, alignment);
     }
+
+    @Override
+    public void nextDay() {
+
+    }
+
+    @Override
+    public void nextNight() {
+
+    }
 }

@@ -6,6 +6,7 @@ import com.udstu.enderkiller.Util;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.Alignment;
 import com.udstu.enderkiller.enumeration.Occupation;
+import com.udstu.enderkiller.task.TimeLapseTask;
 import com.udstu.enderkiller.worldcreator.MainWorldCreator;
 import com.udstu.enderkiller.worldcreator.NetherWorldCreator;
 import com.udstu.enderkiller.worldcreator.SpawnWorldCreator;
@@ -13,10 +14,12 @@ import com.udstu.enderkiller.worldcreator.TheEndWorldCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
@@ -29,14 +32,19 @@ public abstract class Game {
     protected Alignment[] alignments = null;
     protected Occupation[] lurkers = null;
     protected Occupation[] explorers = null;
+    private int day = 1;
     private String worldNamePrefix = null;
     private String spawnWorldName = null;
+    private World spawnWorld = null;
     private Location spawnWorldSpawnLocation = null;
     private String mainWorldName = null;
+    private World mainWorld = null;
+    private Location mainWorldSpawnLocation = null;
     private String netherWorldName = null;
     private String theEndWorldName = null;
     private Plugin thisPlugin = null;
     private Server server = null;
+    private BukkitTask timeLapseTask = null;
 
     public Game(Room room) {
         this.room = room;
@@ -57,6 +65,10 @@ public abstract class Game {
         tpPlayersToSpawnWorld();
         allocateOccupation();
         giveInitMoney();
+        registerTimeLapseTask();
+
+        room.setGame(this);
+        room.updateScoreBoard();
     }
 
     protected abstract void initOccupation();
@@ -66,13 +78,25 @@ public abstract class Game {
 
         //加载或创建主城世界
         room.broadcast(R.getLang("loadingWorld") + ": " + spawnWorldName);
-        spawnWorldSpawnLocation = server.createWorld(new SpawnWorldCreator(spawnWorldName)).getSpawnLocation();
+        spawnWorld = server.createWorld(new SpawnWorldCreator(spawnWorldName));
+        spawnWorldSpawnLocation = spawnWorld.getSpawnLocation();
+        spawnWorld.setGameRuleValue("doDaylightCycle", "false");
+        spawnWorld.setGameRuleValue("doFireTick", "false");
+        spawnWorld.setGameRuleValue("doMobLoot", "false");
+        spawnWorld.setGameRuleValue("doMobSpawning", "false");
+        spawnWorld.setGameRuleValue("keepInventory", "true");
+        spawnWorld.setGameRuleValue("mobGriefing", "false");
+        spawnWorld.setTime(6000);
 
         //创建游戏世界
         room.broadcast(R.getLang("loadingWorld") + ": " + mainWorldName);
-        server.createWorld(new MainWorldCreator(mainWorldName));
+        mainWorld = server.createWorld(new MainWorldCreator(mainWorldName));
+        mainWorldSpawnLocation = mainWorld.getSpawnLocation();
+        mainWorld.setTime(13800);
+
         room.broadcast(R.getLang("loadingWorld") + ": " + netherWorldName);
         server.createWorld(new NetherWorldCreator(netherWorldName));
+
         room.broadcast(R.getLang("loadingWorld") + ": " + theEndWorldName);
         server.createWorld(new TheEndWorldCreator(theEndWorldName));
     }
@@ -136,6 +160,49 @@ public abstract class Game {
             playerInventory.addItem(new ItemStack(material, amount));
             player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
         }
+    }
+
+    private boolean registerTimeLapseTask() {
+        if (timeLapseTask == null) {
+            timeLapseTask = server.getScheduler().runTaskTimer(thisPlugin, new TimeLapseTask(this, mainWorld), 1, 1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean removeTimeLapseTask() {
+        if (timeLapseTask == null) {
+            return false;
+        } else {
+            timeLapseTask.cancel();
+            timeLapseTask = null;
+            return true;
+        }
+    }
+
+    public void nextDay() {
+        room.broadcast(R.getLang("dayTimeCome"));
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            day++;
+            gameCharacter.nextDay();
+            room.updateScoreBoard();
+        }
+    }
+
+    public void nextNight() {
+        room.broadcast(R.getLang("nightTimeCome"));
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            gameCharacter.nextNight();
+        }
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public Location getMainWorldSpawnLocation() {
+        return mainWorldSpawnLocation;
     }
 
     //内部类,用作结构体

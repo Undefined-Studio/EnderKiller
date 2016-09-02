@@ -11,4 +11,14 @@ public class Fighter extends GameCharacter {
     public Fighter(GameCharacter gameCharacter, Alignment alignment) {
         super(gameCharacter, alignment);
     }
+
+    @Override
+    public void nextDay() {
+
+    }
+
+    @Override
+    public void nextNight() {
+
+    }
 }

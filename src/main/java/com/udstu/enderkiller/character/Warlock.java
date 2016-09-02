@@ -11,4 +11,14 @@ public class Warlock extends GameCharacter {
     public Warlock(GameCharacter gameCharacter, Alignment alignment) {
         super(gameCharacter, alignment);
     }
+
+    @Override
+    public void nextDay() {
+
+    }
+
+    @Override
+    public void nextNight() {
+
+    }
 }
