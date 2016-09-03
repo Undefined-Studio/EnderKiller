@@ -1,6 +1,7 @@
 package com.udstu.enderkiller.command;
 
 import com.udstu.enderkiller.*;
+import com.udstu.enderkiller.character.DefaultGameCharacter;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.command.Command;
@@ -133,7 +134,7 @@ public class CommandEk implements CommandExecutor {
             if (targetRoom.isFull()) {
                 commandSender.sendMessage(R.getLang("roomIsFull"));
             } else {
-                targetRoom.add(new GameCharacter((Player) commandSender));
+                targetRoom.add(new DefaultGameCharacter((Player) commandSender));
                 commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
                 R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
             }

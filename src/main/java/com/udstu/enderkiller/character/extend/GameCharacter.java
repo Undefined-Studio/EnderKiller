@@ -9,15 +9,11 @@ import org.bukkit.entity.Player;
  * Created by czp on 16-8-12.
  * 所有职业的父类
  */
-public class GameCharacter {
+public abstract class GameCharacter {
     protected Player player = null;
     protected Alignment alignment = null;
     protected Occupation occupation = null;
     private GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
-
-    public GameCharacter() {
-
-    }
 
     public GameCharacter(Player player) {
         this.player = player;
@@ -28,14 +24,9 @@ public class GameCharacter {
         this.alignment = alignment;
     }
 
-    //这两个当抽象方法使用
-    public void nextDay() {
+    public abstract void nextDay();
 
-    }
-
-    public void nextNight() {
-
-    }
+    public abstract void nextNight();
 
     public void killed() {
         gameCharacterStatus = GameCharacterStatus.dead;
