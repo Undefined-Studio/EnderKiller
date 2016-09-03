@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -216,6 +217,29 @@ public class CommandEk implements CommandExecutor {
         }
     }
 
+    //查看个人信息 /ek my
+    private void commandMy(CommandSender commandSender, Command command, String label, String[] args) {
+        Room locatedRoom = Util.searchPlayer(commandSender.getName());
+        GameCharacter gameCharacter;
+        List<String> infoList = new LinkedList<>();
+
+        if (locatedRoom == null) {
+            infoList.add(R.getLang("roomId") + ": N/A");
+        } else {
+            infoList.add(R.getLang("roomId") + ": " + locatedRoom.getId());
+            infoList.add(R.getLang("roomStatus") + ": " + locatedRoom.getRoomStatus().toString());
+            if (locatedRoom.getRoomStatus() == RoomStatus.inGame) {
+                infoList.add(R.getLang("gameTime") + ": day " + locatedRoom.getGame().getDay());
+                gameCharacter = locatedRoom.getGameCharacter(commandSender.getName());
+                infoList.add(R.getLang("yourAlignment") + ": " + gameCharacter.getAlignment());
+                infoList.add(R.getLang("yourOccupation") + ": " + gameCharacter.getOccupation());
+                infoList.add(R.getLang("location") + ": " + ((Player) commandSender).getWorld().getName());
+            }
+        }
+
+        commandSender.sendMessage(infoList.toArray(new String[infoList.size()]));
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -268,6 +292,14 @@ public class CommandEk implements CommandExecutor {
                 case "tp": {
                     if (Player.class.isInstance(commandSender)) {
                         commandTp(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "my": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandMy(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }

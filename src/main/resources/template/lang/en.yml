@@ -7,6 +7,7 @@ commandExit: Exit form room
 commandDel: Delete a room
 commandStart: Start game
 commandTp: Teleport to main world of current game
+commandMy: Show my info
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -25,6 +26,9 @@ detective: Detective
 teacher: Teacher
 fighter: Fighter
 
+alive: Alive
+dead: Dead
+
 usage: Usage
 modeAllowed: Mode allowed
 invalidCommand: Invalid argument(s) ,type {$help} for help  #{$help}
@@ -32,7 +36,7 @@ reloadedConfiguration: Reloaded configuration
 numberOfRoomsOutOfLimit: Number of rooms out of limit
 mode: mode
 onlyPlayerCanUseThisCommand: Only player can use this command
-roomId: RoomId
+roomId: Room id
 alreadyInARoom: Already in a room
 noSuchRoom: No such room
 roomIsFull: Room is full
@@ -61,3 +65,6 @@ youGet: You get
 dayTimeCome: Day time come
 nightTimeCome: Night time come
 gameNotStart: Game not start
+roomStatus: Room status
+gameTime: Game time
+location: Location

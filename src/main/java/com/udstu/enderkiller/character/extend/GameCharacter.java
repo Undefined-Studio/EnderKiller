@@ -1,6 +1,8 @@
 package com.udstu.enderkiller.character.extend;
 
 import com.udstu.enderkiller.enumeration.Alignment;
+import com.udstu.enderkiller.enumeration.GameCharacterStatus;
+import com.udstu.enderkiller.enumeration.Occupation;
 import org.bukkit.entity.Player;
 
 /**
@@ -10,6 +12,8 @@ import org.bukkit.entity.Player;
 public class GameCharacter {
     protected Player player = null;
     protected Alignment alignment = null;
+    protected Occupation occupation = null;
+    private GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
 
     public GameCharacter() {
 
@@ -33,6 +37,11 @@ public class GameCharacter {
 
     }
 
+    public void killed() {
+        gameCharacterStatus = GameCharacterStatus.dead;
+        player.setHealth(0);
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -47,5 +56,13 @@ public class GameCharacter {
 
     public void setAlignment(Alignment alignment) {
         this.alignment = alignment;
+    }
+
+    public GameCharacterStatus getGameCharacterStatus() {
+        return gameCharacterStatus;
+    }
+
+    public Occupation getOccupation() {
+        return occupation;
     }
 }

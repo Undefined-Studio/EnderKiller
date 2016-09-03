@@ -1,5 +1,6 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.Array;
@@ -150,6 +151,17 @@ public class Util {
         } else {
             return searchRoom(Integer.parseInt(roomIdStr));
         }
+    }
+
+    public static GameCharacter searchGameCharacter(String playerName) {
+        GameCharacter gameCharacter;
+        for (Room room : Lobby.getRoomList()) {
+            gameCharacter = room.getGameCharacter(playerName);
+            if (gameCharacter != null) {
+                return gameCharacter;
+            }
+        }
+        return null;
     }
 
     //随机排列数组
