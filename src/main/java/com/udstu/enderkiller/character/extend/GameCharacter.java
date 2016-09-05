@@ -29,7 +29,6 @@ public abstract class GameCharacter {
     public abstract void nextNight();
 
     public void killed() {
-        gameCharacterStatus = GameCharacterStatus.dead;
         player.setHealth(0);
     }
 

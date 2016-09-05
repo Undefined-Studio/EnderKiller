@@ -60,6 +60,9 @@ public abstract class Game {
     }
 
     public void start() {
+        //log
+        thisPlugin.getLogger().info("房间 " + room.getId() + " 开始了游戏");
+
         initOccupation();
         initWorlds();
         tpPlayersToSpawnWorld();
@@ -69,6 +72,10 @@ public abstract class Game {
 
         room.setGame(this);
         room.updateScoreBoard();
+    }
+
+    public void over() {
+        removeTimeLapseTask();
     }
 
     protected abstract void initOccupation();
@@ -141,6 +148,13 @@ public abstract class Game {
             player.sendMessage(R.getLang("yourAlignment") + ": " + alignment.toString());
             player.sendMessage(R.getLang("yourOccupation") + ": " + occupation.toString());
         }
+
+        //log
+        String occupationsInfo = "";
+        for (i = 0; i < gameCharacters.size(); i++) {
+            occupationsInfo += "\n" + "[" + (i + 1) + "]" + gameCharacters.get(i).getPlayer().getName() + " " + alignmentAndOccupations[i].alignment + " " + alignmentAndOccupations[i].occupation;
+        }
+        thisPlugin.getLogger().info("房间 " + room.getId() + " 的身份分配情况: " + occupationsInfo);
     }
 
     private void giveInitMoney() {
