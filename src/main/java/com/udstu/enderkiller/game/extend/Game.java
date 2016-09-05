@@ -87,6 +87,7 @@ public abstract class Game {
         room.broadcast(R.getLang("loadingWorld") + ": " + spawnWorldName);
         spawnWorld = server.createWorld(new SpawnWorldCreator(spawnWorldName));
         spawnWorldSpawnLocation = spawnWorld.getSpawnLocation();
+        spawnWorld.setPVP(false);
         spawnWorld.setGameRuleValue("doDaylightCycle", "false");
         spawnWorld.setGameRuleValue("doFireTick", "false");
         spawnWorld.setGameRuleValue("doMobLoot", "false");

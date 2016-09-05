@@ -153,6 +153,7 @@ public class Util {
         }
     }
 
+    //搜索GameCharacter
     public static GameCharacter searchGameCharacter(String playerName) {
         GameCharacter gameCharacter;
         for (Room room : Lobby.getRoomList()) {
