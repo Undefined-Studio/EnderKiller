@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
  */
 public class PlayerPortalListener implements Listener {
     //The code from Multiworld
-    private PortalType getPortalType(Location location) {
+    private static PortalType getPortalType(Location location) {
         Block block = location.getBlock();
         Material material;
         for (BlockFace face : new BlockFace[]{BlockFace.SELF, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST}) {

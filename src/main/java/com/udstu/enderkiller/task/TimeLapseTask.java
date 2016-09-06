@@ -8,8 +8,8 @@ import org.bukkit.World;
  * Run per tick
  */
 public class TimeLapseTask implements Runnable {
-    Game game;
-    World world = null;
+    private Game game;
+    private World world = null;
 
     public TimeLapseTask(Game game, World world) {
         this.game = game;
