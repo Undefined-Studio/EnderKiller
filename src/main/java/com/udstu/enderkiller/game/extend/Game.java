@@ -286,6 +286,7 @@ public abstract class Game implements VoteCallBack {
                 Vote.sort(voteResults);
                 String voteResultStr = R.getLang("voteResult") + ": ";
                 String teamLeaderName;
+                GameCharacter gameCharacter;
 
                 for (VoteResult voteResult : voteResults) {
                     voteResultStr += voteResult.voteItem.item + "[" + voteResult.votes + "]" + " ";
@@ -298,19 +299,28 @@ public abstract class Game implements VoteCallBack {
                     launchTeamLeaderVote();
                 } else {
                     teamLeaderName = voteResults.get(0).voteItem.item;
+                    gameCharacter = room.getGameCharacter(teamLeaderName);
+
                     room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
-                    room.getGameCharacter(teamLeaderName).setTeamLeader();
+                    gameCharacter.getPlayer().sendMessage(R.getLang("youBecomeTeamLeader"));
+                    gameCharacter.setTeamLeader();
                 }
             }
             break;
             case teamLeaderDieVote: {
                 Vote.sort(voteResults);
                 String teamLeaderName;
-                //在有投票时,即非超时未选的情况
+                GameCharacter gameCharacter;
+                //在有投票时,即非超时未选或弃权的情况
                 if (voteResults.get(0).votes != 0) {
                     teamLeaderName = voteResults.get(0).voteItem.item;
+                    gameCharacter = room.getGameCharacter(teamLeaderName);
+
                     room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
-                    room.getGameCharacter(teamLeaderName).setTeamLeader();
+                    gameCharacter.getPlayer().sendMessage(R.getLang("youBecomeTeamLeader"));
+                    gameCharacter.setTeamLeader();
+                } else {
+                    launchTeamLeaderVote();
                 }
             }
             break;
