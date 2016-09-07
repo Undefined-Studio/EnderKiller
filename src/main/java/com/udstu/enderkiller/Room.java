@@ -1,6 +1,7 @@
 package com.udstu.enderkiller;
 
 import com.udstu.enderkiller.character.extend.GameCharacter;
+import com.udstu.enderkiller.enumeration.GameCharacterStatus;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import com.udstu.enderkiller.game.Game8;
 import com.udstu.enderkiller.game.extend.Game;
@@ -86,7 +87,7 @@ public class Room {
     //更新计分板
     public void updateScoreBoard() {
         Player player;
-        String playerName;
+        String DisplayPlayerName;
         String objectiveDisplayName = "";
 
         if (objective != null) {
@@ -102,16 +103,20 @@ public class Room {
 
         for (int i = 1; i <= gameCharacters.size(); i++) {
             player = gameCharacters.get(i - 1).getPlayer();
-            playerName = "";
+            DisplayPlayerName = "";
 
             //玩家不在线时使用黑色显示
             if (!player.isOnline()) {
-                playerName += ChatColor.BLACK;
+                DisplayPlayerName += ChatColor.BLACK;
+            }
+            //角色死亡时
+            if (getGameCharacter(player.getName()).getGameCharacterStatus() == GameCharacterStatus.dead) {
+                DisplayPlayerName += ChatColor.STRIKETHROUGH;
             }
 
-            playerName += player.getName();
+            DisplayPlayerName += player.getName();
 
-            objective.getScore(playerName).setScore(i);
+            objective.getScore(DisplayPlayerName).setScore(i);
 
             player.setScoreboard(scoreboard);
         }

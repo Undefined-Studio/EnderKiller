@@ -35,6 +35,9 @@ public class PlayerDeathListener implements Listener {
 
             //取消队长身份
             gameCharacter.unsetTeamLeader();
+
+            //更新计分板
+            targetRoom.updateScoreBoard();
         }
     }
 }
