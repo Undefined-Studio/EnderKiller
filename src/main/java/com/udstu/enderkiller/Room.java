@@ -87,8 +87,9 @@ public class Room {
     //更新计分板
     public void updateScoreBoard() {
         Player player;
-        String DisplayPlayerName;
+        String displayPlayerName;
         String objectiveDisplayName = "";
+        GameCharacter gameCharacter;
 
         if (objective != null) {
             objective.unregister();
@@ -103,20 +104,25 @@ public class Room {
 
         for (int i = 1; i <= gameCharacters.size(); i++) {
             player = gameCharacters.get(i - 1).getPlayer();
-            DisplayPlayerName = "";
+            gameCharacter = getGameCharacter(player.getName());
+            displayPlayerName = "";
 
+            //玩家为队长时增加前缀
+            if (gameCharacter.isTeamLeader()) {
+                displayPlayerName += "[" + R.getLang("teamLeader") + "]";
+            }
             //玩家不在线时使用黑色显示
             if (!player.isOnline()) {
-                DisplayPlayerName += ChatColor.BLACK;
+                displayPlayerName += ChatColor.BLACK;
             }
-            //角色死亡时
-            if (getGameCharacter(player.getName()).getGameCharacterStatus() == GameCharacterStatus.dead) {
-                DisplayPlayerName += ChatColor.STRIKETHROUGH;
+            //角色死亡时使用删去线
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.dead) {
+                displayPlayerName += ChatColor.STRIKETHROUGH;
             }
 
-            DisplayPlayerName += player.getName();
+            displayPlayerName += player.getName();
 
-            objective.getScore(DisplayPlayerName).setScore(i);
+            objective.getScore(displayPlayerName).setScore(i);
 
             player.setScoreboard(scoreboard);
         }

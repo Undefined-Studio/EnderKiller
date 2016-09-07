@@ -329,6 +329,7 @@ public abstract class Game implements VoteCallBack {
             }
             break;
         }
+        room.updateScoreBoard();
     }
 
     public int getDay() {
