@@ -19,7 +19,7 @@ public class Vote {
             VoteResult voteResult1 = (VoteResult) object1;
             VoteResult voteResult2 = (VoteResult) object2;
 
-            return Double.valueOf(voteResult1.votes).compareTo(voteResult2.votes);
+            return Double.valueOf(voteResult2.votes).compareTo(voteResult1.votes);
         }
     }
 }
