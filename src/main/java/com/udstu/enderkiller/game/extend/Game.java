@@ -5,8 +5,12 @@ import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.Util;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.Alignment;
+import com.udstu.enderkiller.enumeration.GameCharacterStatus;
 import com.udstu.enderkiller.enumeration.Occupation;
+import com.udstu.enderkiller.enumeration.VoteCause;
 import com.udstu.enderkiller.task.TimeLapseTask;
+import com.udstu.enderkiller.vote.*;
+import com.udstu.enderkiller.vote.implement.VoteCallBack;
 import com.udstu.enderkiller.worldcreator.MainWorldCreator;
 import com.udstu.enderkiller.worldcreator.NetherWorldCreator;
 import com.udstu.enderkiller.worldcreator.SpawnWorldCreator;
@@ -21,13 +25,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by czp on 16-8-25.
  * 所有游戏模式的父类
  */
-public abstract class Game {
+public abstract class Game implements VoteCallBack {
     protected Room room = null;
     protected Alignment[] alignments = null;
     protected Occupation[] lurkers = null;
@@ -69,13 +74,10 @@ public abstract class Game {
         allocateOccupation();
         giveInitMoney();
         registerTimeLapseTask();
+        launchTeamLeaderVote();
 
         room.setGame(this);
         room.updateScoreBoard();
-    }
-
-    public void over() {
-        removeTimeLapseTask();
     }
 
     protected abstract void initOccupation();
@@ -186,6 +188,10 @@ public abstract class Game {
         }
     }
 
+    public void over() {
+        removeTimeLapseTask();
+    }
+
     private boolean removeTimeLapseTask() {
         if (timeLapseTask == null) {
             return false;
@@ -209,6 +215,98 @@ public abstract class Game {
         room.broadcast(R.getLang("nightTimeCome"));
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             gameCharacter.nextNight();
+        }
+    }
+
+    //队长选举
+    private void launchTeamLeaderVote() {
+        Player player;
+        List<VoteItem> voteItems = new ArrayList<>();
+        List<VotePlayerAndWeight> votePlayerAndWeights = new ArrayList<>();
+        VoteCause voteCause = VoteCause.teamLeaderVote;
+        String warning = R.getLang("teamLeaderVoteWarning");
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            //若玩家已死亡(屠龙杀游戏角色死亡)则不参与投票也不成为投票项
+            if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {
+                continue;
+            }
+            player = gameCharacter.getPlayer();
+            voteItems.add(new VoteItem(player.getName()));
+            votePlayerAndWeights.add(new VotePlayerAndWeight(player));
+        }
+
+        room.broadcast(R.getLang("teamLeaderVoteTitle"));
+        //广播可用玩家列表
+        String playerList = R.getLang("playerList") + ": ";
+        for (VoteItem voteItem : voteItems) {
+            playerList += voteItem.item + " ";
+        }
+        room.broadcast(playerList);
+
+        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this), thisPlugin);
+    }
+
+    //队长死亡时选举接班人
+    public void launchTeamLeaderDieVote(Player teamLeader) {
+        List<VoteItem> voteItems = new ArrayList<>();
+        List<VotePlayerAndWeight> votePlayerAndWeights = new ArrayList<>();
+        VoteCause voteCause = VoteCause.teamLeaderDieVote;
+        String warning = R.getLang("teamLeaderVoteWarning");
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            //若玩家已死亡(屠龙杀游戏角色死亡)则不成为投票项
+            if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {
+                continue;
+            }
+            voteItems.add(new VoteItem(gameCharacter.getPlayer().getName()));
+        }
+
+        //可选玩家低于2个时直接退出
+        if (voteItems.size() < 2) {
+            return;
+        }
+
+        votePlayerAndWeights.add(new VotePlayerAndWeight(teamLeader));
+
+        teamLeader.sendMessage(R.getLang("teamLeaderVoteTitle"));
+        String playerList = R.getLang("playerList") + ": ";
+        for (VoteItem voteItem : voteItems) {
+            playerList += voteItem.item + " ";
+        }
+        teamLeader.sendMessage(playerList);
+
+        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this), thisPlugin);
+    }
+
+    @Override
+    public void voteCallBack(List<VoteResult> voteResults, VoteCause voteCause) {
+        switch (voteCause) {
+            case teamLeaderVote: {
+                Vote.sort(voteResults);
+                String voteResultStr = R.getLang("voteResult") + ": ";
+                String teamLeaderName;
+
+                for (VoteResult voteResult : voteResults) {
+                    voteResultStr += voteResult.voteItem.item + "[" + voteResult.votes + "]" + " ";
+                }
+                room.broadcast(voteResultStr);
+
+                //有同票
+                if (voteResults.size() > 1 && voteResults.get(0).votes == voteResults.get(1).votes) {
+                    room.broadcast(R.getLang("thereIsSameTicket"));
+                    launchTeamLeaderVote();
+                } else {
+                    teamLeaderName = voteResults.get(0).voteItem.item;
+                    room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
+                    room.getGameCharacter(teamLeaderName).setTeamLeader();
+                }
+            }
+            break;
+            case skillLaunchVote: {
+
+            }
+            break;
         }
     }
 

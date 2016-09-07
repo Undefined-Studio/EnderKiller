@@ -68,3 +68,9 @@ gameNotStart: Game not start
 roomStatus: Room status
 gameTime: Game time
 location: Location
+teamLeaderVoteWarning: Please input name of the player which you want to vote for
+teamLeaderVoteTitle: Teamleader voting started, please input the name to vote
+playerList: Player list
+voteResult: Voting result
+thereIsSameTicket: There is same ticket, vote again!
+newTeamleaderBorn: New teamleader born

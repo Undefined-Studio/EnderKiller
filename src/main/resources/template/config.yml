@@ -5,3 +5,4 @@ worldNamePrefix: enderkill_world
 spawnWorldName: enderkill_world_spawn
 initMoneyType: EMERALD
 initMoneyAmount: 30
+voteAbstainSign: -1

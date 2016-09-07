@@ -14,6 +14,7 @@ public abstract class GameCharacter {
     protected Alignment alignment = null;
     protected Occupation occupation = null;
     private GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
+    private boolean isTeamLeader = false;
 
     public GameCharacter(Player player) {
         this.player = player;
@@ -52,7 +53,26 @@ public abstract class GameCharacter {
         return gameCharacterStatus;
     }
 
+    public void setGameCharacterStatus(GameCharacterStatus gameCharacterStatus) {
+        this.gameCharacterStatus = gameCharacterStatus;
+    }
+
     public Occupation getOccupation() {
         return occupation;
+    }
+
+    public boolean isTeamLeader() {
+        return isTeamLeader;
+    }
+
+    public void setTeamLeader() {
+        isTeamLeader = true;
+        player.setMaxHealth(player.getMaxHealth() + 10);
+        player.setHealth(player.getHealth() + 10);
+    }
+
+    public void unsetTeamLeader() {
+        isTeamLeader = false;
+        player.setMaxHealth(20);
     }
 }
