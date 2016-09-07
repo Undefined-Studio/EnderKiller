@@ -71,6 +71,7 @@ public class VoteListener implements Listener {
         if (indexOfPlayers < votePlayerAndWeights.size()) {
             //若输入弃权符号则直接从投票目标玩家群体中移除此玩家
             if (message.equals(R.getConfig("voteAbstainSign"))) {
+                player.sendMessage(R.getLang("youAbstainFromVoting"));
                 votePlayerAndWeights.remove(indexOfPlayers);
             } else {
                 indexOfVoteItems = indexOfVoteItem(voteItems, message);
@@ -78,10 +79,13 @@ public class VoteListener implements Listener {
                 if (indexOfVoteItems == -1) {
                     player.sendMessage(warning);
                 } else {
+                    player.sendMessage(R.getLang("youChoose") + ": " + message);
                     voteResults.get(indexOfVoteItems).votes += votePlayerAndWeights.get(indexOfPlayers).weight;
                     votePlayerAndWeights.remove(indexOfPlayers);
                 }
             }
+            //关闭此事件,以防止其他插件或spigot对玩家输入做出反应
+            asyncPlayerChatEvent.setCancelled(true);
         }
 
         //若投票目标玩家群体大小为0,即所有人已投票完毕
@@ -90,7 +94,5 @@ public class VoteListener implements Listener {
             //回调函数
             voteCallBack.voteCallBack(voteResults, voteCause);
         }
-        //关闭此事件,以防止其他插件或spigot对玩家输入做出反应
-        asyncPlayerChatEvent.setCancelled(true);
     }
 }

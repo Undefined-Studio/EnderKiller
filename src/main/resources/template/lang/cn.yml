@@ -69,8 +69,10 @@ roomStatus: 房间状态
 gameTime: 游戏时间
 location: 位于
 teamLeaderVoteWarning: 请输入你想选举为队长的玩家的名字
-teamLeaderVoteTitle: 队长选举开始了,请输入玩家名称以投票
+teamLeaderVoteTitle: 队长选举开始了,请输入玩家名称以投票.输入"-1"弃权
 playerList: 玩家列表
 voteResult: 投票结果
 thereIsSameTicket: 存在同票,重新投票!
 newTeamleaderBorn: 新的队长被钦定了
+youAbstainFromVoting: 你放弃了投票
+youChoose: 你钦定了

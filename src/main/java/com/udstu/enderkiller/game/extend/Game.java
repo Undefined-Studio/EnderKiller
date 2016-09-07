@@ -303,6 +303,17 @@ public abstract class Game implements VoteCallBack {
                 }
             }
             break;
+            case teamLeaderDieVote: {
+                Vote.sort(voteResults);
+                String teamLeaderName;
+                //在有投票时,即非超时未选的情况
+                if (voteResults.get(0).votes != 0) {
+                    teamLeaderName = voteResults.get(0).voteItem.item;
+                    room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
+                    room.getGameCharacter(teamLeaderName).setTeamLeader();
+                }
+            }
+            break;
             case skillLaunchVote: {
 
             }
