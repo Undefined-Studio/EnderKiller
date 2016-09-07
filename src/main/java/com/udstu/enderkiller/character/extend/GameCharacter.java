@@ -72,7 +72,9 @@ public abstract class GameCharacter {
     }
 
     public void unsetTeamLeader() {
+        if (isTeamLeader()) {
+            player.setMaxHealth(player.getMaxHealth() - 10);
+        }
         isTeamLeader = false;
-        player.setMaxHealth(20);
     }
 }
