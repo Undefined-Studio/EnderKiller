@@ -236,7 +236,7 @@ public abstract class Game implements VoteCallBack {
             votePlayerAndWeights.add(new VotePlayerAndWeight(player));
         }
 
-        room.broadcast(R.getLang("teamLeaderVoteTitle"));
+        room.broadcast(R.getLang("teamLeaderVoteTitle").replace("{0}", R.getConfig("voteAbstainSign")));
         //广播可用玩家列表
         String playerList = R.getLang("playerList") + ": ";
         for (VoteItem voteItem : voteItems) {
@@ -244,7 +244,7 @@ public abstract class Game implements VoteCallBack {
         }
         room.broadcast(playerList);
 
-        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this), thisPlugin);
+        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this, Integer.valueOf(R.getConfig("teamLeaderVoteTimeout"))), thisPlugin);
     }
 
     //队长死亡时选举接班人
@@ -262,21 +262,21 @@ public abstract class Game implements VoteCallBack {
             voteItems.add(new VoteItem(gameCharacter.getPlayer().getName()));
         }
 
-        //可选玩家低于2个时直接退出
-        if (voteItems.size() < 2) {
+        //可选玩家为0时直接退出
+        if (voteItems.size() == 0) {
             return;
         }
 
         votePlayerAndWeights.add(new VotePlayerAndWeight(teamLeader));
 
-        teamLeader.sendMessage(R.getLang("teamLeaderVoteTitle"));
+        teamLeader.sendMessage(R.getLang("teamLeaderVoteTitle").replace("{0}", R.getConfig("voteAbstainSign")));
         String playerList = R.getLang("playerList") + ": ";
         for (VoteItem voteItem : voteItems) {
             playerList += voteItem.item + " ";
         }
         teamLeader.sendMessage(playerList);
 
-        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this), thisPlugin);
+        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this, Integer.valueOf(R.getConfig("teamLeaderDieVoteTimeout"))), thisPlugin);
     }
 
     @Override
@@ -322,10 +322,6 @@ public abstract class Game implements VoteCallBack {
                 } else {
                     launchTeamLeaderVote();
                 }
-            }
-            break;
-            case skillLaunchVote: {
-
             }
             break;
         }

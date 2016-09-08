@@ -2,12 +2,16 @@ package com.udstu.enderkiller.vote;
 
 import com.udstu.enderkiller.R;
 import com.udstu.enderkiller.enumeration.VoteCause;
+import com.udstu.enderkiller.task.Timer;
+import com.udstu.enderkiller.task.implement.TimerCallBack;
 import com.udstu.enderkiller.vote.implement.VoteCallBack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +20,17 @@ import java.util.List;
  * Created by czp on 16-9-6.
  * 投票监听器
  */
-public class VoteListener implements Listener {
+public class VoteListener implements Listener, TimerCallBack {
+    private Plugin thisPlugin = R.getMainClass();
     private List<VoteItem> voteItems = null;
     private List<VotePlayerAndWeight> votePlayerAndWeights = null;
     private VoteCause voteCause = null;
     private String warning = null;
     private VoteCallBack voteCallBack = null;
     private List<VoteResult> voteResults = null;
+    private long longestTime = -1;
+    private String defaultChoose = null;
+    private BukkitTask timer = null;
 
     public VoteListener(List<VoteItem> voteItems, List<VotePlayerAndWeight> votePlayerAndWeights, VoteCause voteCause, String warning, VoteCallBack voteCallBack) {
         this.voteItems = voteItems;
@@ -37,10 +45,21 @@ public class VoteListener implements Listener {
         }
     }
 
+    public VoteListener(List<VoteItem> voteItems, List<VotePlayerAndWeight> votePlayerAndWeights, VoteCause voteCause, String warning, VoteCallBack voteCallBack, long longestTime) {
+        this(voteItems, votePlayerAndWeights, voteCause, warning, voteCallBack);
+        this.longestTime = longestTime;
+        timer = thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Timer(this), longestTime);
+    }
+
+    public VoteListener(List<VoteItem> voteItems, List<VotePlayerAndWeight> votePlayerAndWeights, VoteCause voteCause, String warning, VoteCallBack voteCallBack, long longestTime, String defaultChoose) {
+        this(voteItems, votePlayerAndWeights, voteCause, warning, voteCallBack, longestTime);
+        this.defaultChoose = defaultChoose;
+    }
+
     //得到输入值在投票项中的下标,若不存在则返回-1
-    private static int indexOfVoteItem(List<VoteItem> voteItems, String message) {
+    private static int indexOfVoteItem(List<VoteItem> voteItems, String voteItem) {
         for (int i = 0; i < voteItems.size(); i++) {
-            if (voteItems.get(i).item.equals(message)) {
+            if (voteItems.get(i).item.equals(voteItem)) {
                 return i;
             }
         }
@@ -90,9 +109,44 @@ public class VoteListener implements Listener {
 
         //若投票目标玩家群体大小为0,即所有人已投票完毕
         if (votePlayerAndWeights.size() == 0) {
-            HandlerList.unregisterAll(this);
-            //回调函数
-            voteCallBack.voteCallBack(voteResults, voteCause);
+            over();
         }
+    }
+
+    @Override
+    public void timerCallBack() {
+        int index;
+        VoteResult voteResult;
+
+        for (VotePlayerAndWeight votePlayerAndWeight : votePlayerAndWeights) {
+            votePlayerAndWeight.player.sendMessage(R.getLang("votingTimeout"));
+        }
+
+        //默认选项不为null时
+        if (defaultChoose != null) {
+            index = indexOfVoteItem(voteItems, defaultChoose);
+            //当默认选项有效时
+            if (index != -1) {
+                voteResult = voteResults.get(index);
+                for (VotePlayerAndWeight votePlayerAndWeight : votePlayerAndWeights) {
+                    votePlayerAndWeight.player.sendMessage(R.getLang("youChoose") + ": " + defaultChoose);
+                    voteResult.votes += votePlayerAndWeight.weight;
+                }
+            } else {
+                thisPlugin.getLogger().warning("默认选项 '" + defaultChoose + "' 不存在");
+            }
+
+        }
+
+        over();
+    }
+
+    private void over() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        HandlerList.unregisterAll(this);
+        //回调函数
+        voteCallBack.voteCallBack(voteResults, voteCause);
     }
 }

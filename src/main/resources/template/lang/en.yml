@@ -69,7 +69,7 @@ roomStatus: Room status
 gameTime: Game time
 location: Location
 teamLeaderVoteWarning: Please input name of the player which you want to vote for
-teamLeaderVoteTitle: Teamleader voting started, please input the name to vote.Input "-1" to abstain from voting
+teamLeaderVoteTitle: Teamleader voting started, please input the name to vote.Input "{0}" to abstain from voting
 playerList: Player list
 voteResult: Voting result
 thereIsSameTicket: There is same ticket, vote again!
@@ -78,3 +78,4 @@ youAbstainFromVoting: You abstain from voting
 youChoose: You choose
 youBecomeTeamLeader: You become team leader
 teamLeader: Leader
+votingTimeout: Voting timeout
