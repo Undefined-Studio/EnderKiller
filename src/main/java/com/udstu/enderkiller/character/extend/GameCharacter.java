@@ -29,8 +29,13 @@ public abstract class GameCharacter {
 
     public abstract void nextNight();
 
-    public void killed() {
+    public void kill() {
         player.setHealth(0);
+    }
+
+    public void onDeath() {
+        gameCharacterStatus = GameCharacterStatus.dead;
+        unsetTeamLeader();
     }
 
     public Player getPlayer() {
@@ -66,9 +71,11 @@ public abstract class GameCharacter {
     }
 
     public void setTeamLeader() {
+        if (!isTeamLeader()) {
+            player.setMaxHealth(player.getMaxHealth() + 10);
+            player.setHealth(player.getHealth() + 10);
+        }
         isTeamLeader = true;
-        player.setMaxHealth(player.getMaxHealth() + 10);
-        player.setHealth(player.getHealth() + 10);
     }
 
     public void unsetTeamLeader() {
