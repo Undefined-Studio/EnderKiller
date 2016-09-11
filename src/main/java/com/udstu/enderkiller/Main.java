@@ -1,5 +1,6 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.command.CommandEk;
 import com.udstu.enderkiller.listener.PlayerDeathListener;
 import com.udstu.enderkiller.listener.PlayerJoinListener;
@@ -27,6 +28,10 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        for (Room room : Lobby.getRoomList()) {
+            for (GameCharacter gameCharacter : room.getGameCharacters()) {
+                gameCharacter.onDeath();
+            }
+        }
     }
 }
