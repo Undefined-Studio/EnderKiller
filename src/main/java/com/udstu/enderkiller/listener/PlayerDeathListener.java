@@ -22,6 +22,9 @@ public class PlayerDeathListener implements Listener {
         if (targetRoom != null) {
             targetRoom.getGameCharacter(playerName).onDeath();
 
+            //进行队长死亡投票
+            targetRoom.getGame().launchTeamLeaderDieVote(player);
+
             //更新计分板
             targetRoom.updateScoreBoard();
         }
