@@ -169,6 +169,7 @@ public abstract class Game implements VoteCallBack {
         room.broadcast(R.getLang("givingInitMoney"));
 
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            //给予通用货币
             player = gameCharacter.getPlayer();
             playerInventory = player.getInventory();
             material = Material.valueOf(R.getConfig("initMoneyType"));
@@ -176,6 +177,9 @@ public abstract class Game implements VoteCallBack {
 
             playerInventory.addItem(new ItemStack(material, amount));
             player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
+
+            //给予职业特殊初始物品
+            gameCharacter.giveInitItems();
         }
     }
 
