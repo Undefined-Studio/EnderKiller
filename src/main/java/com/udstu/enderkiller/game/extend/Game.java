@@ -21,7 +21,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -160,22 +159,18 @@ public abstract class Game implements VoteCallBack {
         thisPlugin.getLogger().info("房间 " + room.getId() + " 的身份分配情况: " + occupationsInfo);
     }
 
+    //给予初始金钱(默认为绿宝石)
     private void giveInitMoney() {
         Player player;
-        PlayerInventory playerInventory;
-        Material material;
-        int amount;
+        Material material = Material.valueOf(R.getConfig("initMoneyType"));
+        int amount = Integer.valueOf(R.getConfig("initMoneyAmount"));
 
         room.broadcast(R.getLang("givingInitMoney"));
 
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             //给予通用货币
             player = gameCharacter.getPlayer();
-            playerInventory = player.getInventory();
-            material = Material.valueOf(R.getConfig("initMoneyType"));
-            amount = Integer.valueOf(R.getConfig("initMoneyAmount"));
-
-            playerInventory.addItem(new ItemStack(material, amount));
+            player.getInventory().addItem(new ItemStack(material, amount));
             player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
 
             //给予职业特殊初始物品

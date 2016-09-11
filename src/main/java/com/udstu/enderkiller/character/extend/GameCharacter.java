@@ -7,6 +7,7 @@ import com.udstu.enderkiller.enumeration.Occupation;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by czp on 16-8-12.
@@ -32,13 +33,23 @@ public abstract class GameCharacter {
 
     public abstract void nextNight();
 
-    //潜伏者阵营的玩家初始获得一个恶魂之泪
+    //给予初始物品
     public void giveInitItems() {
-        Material material = Material.GHAST_TEAR;
-        int amount = 1;
+        PlayerInventory playerInventory = player.getInventory();
+        Material material;
+        int amount;
 
+        //所有玩家初始给予一个下界之星,用于投票的发起
+        material = Material.NETHER_STAR;
+        amount = 1;
+        playerInventory.addItem(new ItemStack(material, amount));
+        player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
+
+        //潜伏者阵营初始给予一个恶魂之泪,用于部分技能的发动
         if (alignment == Alignment.lurker) {
-            player.getInventory().addItem(new ItemStack(material, amount));
+            material = Material.GHAST_TEAR;
+            amount = 1;
+            playerInventory.addItem(new ItemStack(material, amount));
             player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
         }
     }
