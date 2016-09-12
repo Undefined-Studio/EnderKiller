@@ -64,6 +64,8 @@ public class Priest extends GameCharacter implements VoteCallBack {
         if (voteResults.get(0).votes == 0) {
             curseTarget.getPlayer().setHealth(0);
         } else {
+            //技能发动
+            player.sendMessage(R.getLang("skillLaunch").replace("{0}", R.getLang("rescue")));
             rescueStatus = SkillStatus.cooldown;
         }
     }
