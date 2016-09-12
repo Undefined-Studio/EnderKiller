@@ -2,6 +2,7 @@ package com.udstu.enderkiller.listener;
 
 import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.Util;
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,17 +18,22 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDie(PlayerDeathEvent playerDeathEvent) {
         Player player = playerDeathEvent.getEntity();
         String playerName = player.getName();
-        Room targetRoom = Util.searchPlayer(playerName);
+        Room room = Util.searchPlayer(playerName);
+        GameCharacter gameCharacter;
 
         //玩家在一个房间中且游戏已开始时
-        if (targetRoom != null && targetRoom.getRoomStatus() == RoomStatus.inGame) {
-            targetRoom.getGameCharacter(playerName).onDeath();
+        if (room != null && room.getRoomStatus() == RoomStatus.inGame) {
+            gameCharacter = room.getGameCharacter(playerName);
 
-            //进行队长死亡投票
-            targetRoom.getGame().launchTeamLeaderDieVote(player);
+            //若此角色为队长时进行队长死亡投票
+            if (gameCharacter.isTeamLeader()) {
+                room.getGame().launchTeamLeaderDieVote(player);
+            }
+
+            room.getGameCharacter(playerName).onDeath();
 
             //更新计分板
-            targetRoom.updateScoreBoard();
+            room.updateScoreBoard();
         }
     }
 }
