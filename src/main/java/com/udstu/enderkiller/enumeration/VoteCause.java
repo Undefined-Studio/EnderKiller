@@ -7,4 +7,5 @@ package com.udstu.enderkiller.enumeration;
 public enum VoteCause {
     teamLeaderVote,
     teamLeaderDieVote,
+    skillLaunchVote;
 }

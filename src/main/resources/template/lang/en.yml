@@ -8,6 +8,7 @@ commandDel: Delete a room
 commandStart: Start game
 commandTp: Teleport to main world of current game
 commandMy: Show my info
+commandCurse: The skill 'curse' of warlock
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -25,6 +26,9 @@ priest: Priest
 detective: Detective
 teacher: Teacher
 fighter: Fighter
+
+curse: Curse
+rescue: Rescue
 
 alive: Alive
 dead: Dead
@@ -79,3 +83,14 @@ youChoose: You choose
 youBecomeTeamLeader: You become team leader
 teamLeader: Leader
 votingTimeout: Voting timeout
+pleaseInputYesOrNo: Please input y or n
+occupationError: Occupation error
+playerName: Player name
+targetPlayerNotInTheSameRoomWithYou: Target player not in the same room with you
+youAreDead: You are dead
+skillCoolDownComplete: Skill {0} cooldown complete
+targetAlreadyDie: Target already die
+skillCooldown: Skill cooldown
+noEnough: No enough {0}
+skillLaunch: Skill {0} launch
+doYouWantToRescue: Player {0} has been poisoned, do you want to rescue? [y/n]

@@ -8,3 +8,4 @@ initMoneyAmount: 30
 voteAbstainSign: -1
 teamLeaderVoteTimeout: 200 #ticks
 teamLeaderDieVoteTimeout: 200 #ticks
+skillLaunchVoteTimeout: 100 #ticks

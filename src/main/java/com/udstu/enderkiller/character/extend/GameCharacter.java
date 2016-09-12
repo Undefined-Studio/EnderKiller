@@ -1,30 +1,43 @@
 package com.udstu.enderkiller.character.extend;
 
 import com.udstu.enderkiller.R;
+import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.enumeration.Alignment;
 import com.udstu.enderkiller.enumeration.GameCharacterStatus;
 import com.udstu.enderkiller.enumeration.Occupation;
+import com.udstu.enderkiller.vote.VoteItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by czp on 16-8-12.
  * 所有职业的父类
  */
 public abstract class GameCharacter {
+    protected static List<VoteItem> yesOrNoVoteItem = Arrays.asList(new VoteItem("y"), new VoteItem("n"));    //默认的yes和no选项
+    protected Plugin thisPlugin = R.getMainClass();
+    protected Room room = null;
     protected Player player = null;
     protected Alignment alignment = null;
     protected Occupation occupation = null;
+    protected String yesOrNoWarning = R.getLang("pleaseInputYesOrNo");  //默认的yes和no提示
+    protected int skillLaunchVoteTimeout = Integer.valueOf(R.getConfig("skillLaunchVoteTimeout"));
     private GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
     private boolean isTeamLeader = false;
 
-    public GameCharacter(Player player) {
+    public GameCharacter(Player player, Room room) {
+        this.room = room;
         this.player = player;
     }
 
     public GameCharacter(GameCharacter gameCharacter, Alignment alignment) {
+        this.room = gameCharacter.getRoom();
         this.player = gameCharacter.getPlayer();
         this.alignment = alignment;
     }
@@ -54,13 +67,13 @@ public abstract class GameCharacter {
         }
     }
 
-    public void kill() {
-        player.setHealth(0);
-    }
-
     public void onDeath() {
         gameCharacterStatus = GameCharacterStatus.dead;
         unsetTeamLeader();
+    }
+
+    public Room getRoom() {
+        return room;
     }
 
     public Player getPlayer() {

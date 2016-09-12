@@ -2,7 +2,10 @@ package com.udstu.enderkiller.command;
 
 import com.udstu.enderkiller.*;
 import com.udstu.enderkiller.character.DefaultGameCharacter;
+import com.udstu.enderkiller.character.Warlock;
 import com.udstu.enderkiller.character.extend.GameCharacter;
+import com.udstu.enderkiller.enumeration.GameCharacterStatus;
+import com.udstu.enderkiller.enumeration.Occupation;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -134,7 +137,7 @@ public class CommandEk implements CommandExecutor {
             if (targetRoom.isFull()) {
                 commandSender.sendMessage(R.getLang("roomIsFull"));
             } else {
-                targetRoom.add(new DefaultGameCharacter((Player) commandSender));
+                targetRoom.add(new DefaultGameCharacter((Player) commandSender, targetRoom));
                 commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
                 R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
             }
@@ -150,11 +153,13 @@ public class CommandEk implements CommandExecutor {
         if (locatedRoom == null) {
             commandSender.sendMessage(R.getLang("notInARoom"));
         } else {
-            if (locatedRoom.remove((Player) commandSender)) {
-                commandSender.sendMessage(R.getLang("exitRoomSuccessful"));
-                R.getMainClass().getLogger().info(commandSender.getName() + " exited room " + locatedRoom.getId());
-            } else {
+            if (locatedRoom.getRoomStatus() == RoomStatus.inGame) {
                 commandSender.sendMessage(R.getLang("cannotExitInGame"));
+            } else {
+                if (locatedRoom.remove((Player) commandSender)) {
+                    commandSender.sendMessage(R.getLang("exitRoomSuccessful"));
+                    R.getMainClass().getLogger().info(commandSender.getName() + " exited room " + locatedRoom.getId());
+                }
             }
         }
     }
@@ -241,6 +246,52 @@ public class CommandEk implements CommandExecutor {
         commandSender.sendMessage(infoList.toArray(new String[infoList.size()]));
     }
 
+    //巫师 技能 诅咒 /ek curse
+    private void commandCurse(CommandSender commandSender, Command command, String label, String[] args) {
+        Room room = Util.searchPlayer(commandSender.getName());
+        Room targetRoom;
+        GameCharacter gameCharacter;
+        GameCharacter targetGameCharacter;
+        Warlock warlock;
+        String targetPlayerName;
+
+        //检测是否可以发动技能
+        if (room == null) { //不在房间中
+            commandSender.sendMessage(R.getLang("notInARoom"));
+            return;
+        }
+        if ((room.getRoomStatus() != RoomStatus.inGame)) {  //游戏未开始
+            commandSender.sendMessage(R.getLang("gameNotStart"));
+            return;
+        }
+        gameCharacter = room.getGameCharacter(commandSender.getName());
+        if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
+            commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+
+        if (gameCharacter.getOccupation() != Occupation.warlock) {   //不为巫师
+            commandSender.sendMessage(R.getLang("occupationError"));
+            return;
+        }
+        warlock = (Warlock) gameCharacter;
+
+        //检验参数是否合法
+        if (args.length < 2) {
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " curse <" + R.getLang("playerName") + ">");
+            return;
+        }
+        targetPlayerName = args[1];
+        targetRoom = Util.searchPlayer(targetPlayerName);
+        if (targetRoom != room) { //目标玩家不存在或不和命令发起者在一个房间中
+            commandSender.sendMessage(R.getLang("targetPlayerNotInTheSameRoomWithYou"));
+            return;
+        }
+        targetGameCharacter = targetRoom.getGameCharacter(targetPlayerName);
+
+        warlock.curse(targetGameCharacter);
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -301,6 +352,14 @@ public class CommandEk implements CommandExecutor {
                 case "my": {
                     if (Player.class.isInstance(commandSender)) {
                         commandMy(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "curse": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandCurse(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }

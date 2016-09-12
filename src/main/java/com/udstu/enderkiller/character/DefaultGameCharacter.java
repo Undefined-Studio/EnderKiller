@@ -1,5 +1,6 @@
 package com.udstu.enderkiller.character;
 
+import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import org.bukkit.entity.Player;
 
@@ -8,8 +9,8 @@ import org.bukkit.entity.Player;
  * 用于生成实际职业之前的替代
  */
 public class DefaultGameCharacter extends GameCharacter {
-    public DefaultGameCharacter(Player player) {
-        super(player);
+    public DefaultGameCharacter(Player player, Room room) {
+        super(player, room);
     }
 
     @Override
