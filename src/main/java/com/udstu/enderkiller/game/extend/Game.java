@@ -203,11 +203,11 @@ public abstract class Game implements VoteCallBack {
 
     public void nextDay() {
         room.broadcast(R.getLang("dayTimeCome"));
+        day++;
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
-            day++;
             gameCharacter.nextDay();
-            room.updateScoreBoard();
         }
+        room.updateScoreBoard();
     }
 
     public void nextNight() {
