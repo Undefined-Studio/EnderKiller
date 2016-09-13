@@ -1,11 +1,13 @@
 package com.udstu.enderkiller;
 
+import com.udstu.enderkiller.character.extend.GameCharacter;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,16 +119,11 @@ public class Util {
         commandSender.sendMessage(transToPaginatedMessages(title, header, messageList, page));
     }
 
-    //搜索玩家是否在房间中,是则返回房间指针,否则为null
-    public static Room searchPlayer(Player targetPlayer) {
-        Room targetRoom;
-
+    //搜索玩家是否在房间中,以玩家名作为参数
+    public static Room searchPlayer(String playerName) {
         for (Room room : Lobby.getRoomList()) {
-            for (Player player : room.getPlayers()) {
-                if (player == targetPlayer) {
-                    targetRoom = room;
-                    return targetRoom;
-                }
+            if (room.isExistPlayer(playerName)) {
+                return room;
             }
         }
 
@@ -154,5 +151,42 @@ public class Util {
         } else {
             return searchRoom(Integer.parseInt(roomIdStr));
         }
+    }
+
+    //搜索GameCharacter
+    public static GameCharacter searchGameCharacter(String playerName) {
+        GameCharacter gameCharacter;
+        for (Room room : Lobby.getRoomList()) {
+            gameCharacter = room.getGameCharacter(playerName);
+            if (gameCharacter != null) {
+                return gameCharacter;
+            }
+        }
+        return null;
+    }
+
+    //随机排列数组
+    @SuppressWarnings("unchecked")
+    public static Object randomSort(Object[] objects) {
+        int length = objects.length;
+
+        try {
+            Object result = Array.newInstance(objects.getClass().getComponentType(), length);
+
+            Random random = new Random();
+            for (int i = 0; i < length; i++) {
+                // 得到一个位置
+                int r = random.nextInt(length - i);
+                // 得到那个位置的数值
+                Array.set(result, i, objects[r]);
+                // 将最后一个未用的数字放到这里
+                objects[r] = objects[length - 1 - i];
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

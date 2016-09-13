@@ -5,9 +5,36 @@ commandList: Show all rooms
 commandJoin: Join a room
 commandExit: Exit form room
 commandDel: Delete a room
+commandStart: Start game
+commandTp: Teleport to main world of current game
+commandMy: Show my info
+commandCurse: The skill 'curse' of warlock
+commandResearch: The skill 'research' of detective
 
 inGame: InGame
 waitingForStart: WaitingForStart
+
+explorer: Explorer
+lurker: Lurker
+
+ordinariness: Ordinariness
+warlock: Warlock
+escapee: Escapee
+enchanter: Enchanter
+apprentice: Apprentice
+lawyer: Lawyer
+priest: Priest
+detective: Detective
+teacher: Teacher
+fighter: Fighter
+
+curse: Curse
+rescue: Rescue
+research: Research
+duel: Duel
+
+alive: Alive
+dead: Dead
 
 usage: Usage
 modeAllowed: Mode allowed
@@ -16,7 +43,7 @@ reloadedConfiguration: Reloaded configuration
 numberOfRoomsOutOfLimit: Number of rooms out of limit
 mode: mode
 onlyPlayerCanUseThisCommand: Only player can use this command
-roomId: roomId
+roomId: Room id
 alreadyInARoom: Already in a room
 noSuchRoom: No such room
 roomIsFull: Room is full
@@ -33,3 +60,41 @@ createRoomSuccessful: Create room successful
 joinRoom: Join room {$roomId} #{$roomId}
 exitRoomSuccessful: Exit room successful
 delRoomSuccessful: Delete room successful
+roomNotFull: Room not full
+initializingGame: Initializing game
+loadingWorld: Loading world
+teleporting: Teleporting
+allocatingOccupation: Allocating occupation
+yourAlignment: Your alignment
+yourOccupation: Your occupation
+givingInitMoney: Giving init money
+youGet: You get
+dayTimeCome: Day time come
+nightTimeCome: Night time come
+gameNotStart: Game not start
+roomStatus: Room status
+gameTime: Game time
+location: Location
+teamLeaderVoteWarning: Please input name of the player which you want to vote for
+teamLeaderVoteTitle: Teamleader voting started, please input the name to vote.Input "{0}" to abstain from voting
+playerList: Player list
+voteResult: Voting result
+thereIsSameTicket: There is same ticket, vote again!
+newTeamleaderBorn: New teamleader born
+youAbstainFromVoting: You abstain from voting
+youChoose: You choose
+youBecomeTeamLeader: You become team leader
+teamLeader: Leader
+votingTimeout: Voting timeout
+pleaseInputYesOrNo: Please input y or n
+occupationError: Occupation error
+playerName: Player name
+targetPlayerNotInTheSameRoomWithYou: Target player not in the same room with you
+youAreDead: You are dead
+skillCoolDownComplete: Skill {0} cooldown complete
+targetAlreadyDie: Target already die
+skillCooldown: Skill cooldown
+noEnough: No enough {0}
+skillLaunch: Skill {0} launched
+doYouWantToRescue: Player {0} has been poisoned, do you want to rescue? [y/n]
+alignmentOfThePlayer: Player {0} 's alignment

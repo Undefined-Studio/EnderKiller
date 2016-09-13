@@ -5,9 +5,36 @@ commandList: 显示所有房间
 commandJoin: 加入一个房间
 commandExit: 退出房间
 commandDel: 删除一个房间
+commandStart: 开始游戏
+commandTp: 传送至当前游戏的主世界
+commandMy: 查看我的信息
+commandCurse: 巫师的技能'诅咒'
+commandResearch: 侦探的技能'调查'
 
 inGame: 游戏中
 waitingForStart: 等待开始
+
+explorer: 探险家
+lurker: 潜伏者
+
+ordinariness: 普通人
+warlock: 巫师
+escapee: 逃犯
+enchanter: 幻术师
+apprentice: 学徒
+lawyer: 律师
+priest: 牧师
+detective: 侦探
+teacher: 贤者
+fighter: 斗士
+
+curse: 诅咒
+rescue: 拯救
+research: 调查
+duel: 决斗
+
+alive: 存活
+dead: 死亡
 
 usage: 用法
 modeAllowed: 允许的模式
@@ -33,3 +60,41 @@ createRoomSuccessful: 创建房间成功
 joinRoom: 加入房间 {$roomId} #{$roomId}
 exitRoomSuccessful: 退出房间成功
 delRoomSuccessful: 删除房间成功
+roomNotFull: 房间未满
+initializingGame: 正在初始化游戏
+loadingWorld: 正在加载世界
+teleporting: 正在传送
+allocatingOccupation: 正在分配职业
+yourAlignment: 你的阵营
+yourOccupation: 你的职业
+givingInitMoney: 给予初始金钱
+youGet: 你得到了
+dayTimeCome: 黎明破晓
+nightTimeCome: 夜晚降临
+gameNotStart: 游戏未开始
+roomStatus: 房间状态
+gameTime: 游戏时间
+location: 位于
+teamLeaderVoteWarning: 请输入你想选举为队长的玩家的名字
+teamLeaderVoteTitle: 队长选举开始了,请输入玩家名称以投票.输入"{0}"弃权
+playerList: 玩家列表
+voteResult: 投票结果
+thereIsSameTicket: 存在同票,重新投票!
+newTeamleaderBorn: 新的队长被钦定了
+youAbstainFromVoting: 你放弃了投票
+youChoose: 你选择了
+youBecomeTeamLeader: 你成为了队长
+teamLeader: 队长
+votingTimeout: 投票超时
+pleaseInputYesOrNo: 请输入 y 或 n
+occupationError: 职业错误
+playerName: 玩家名
+targetPlayerNotInTheSameRoomWithYou: 目标玩家与你不在一个房间中
+youAreDead: 你已死亡
+skillCoolDownComplete: 技能 {0} 冷却完毕
+targetAlreadyDie: 目标已死亡
+skillCooldown: 技能冷却中
+noEnough: 没有足够的 {0}
+skillLaunch: 技能 {0} 发动
+doYouWantToRescue: 玩家 {0} 中了巫毒,是否拯救? [y/n]
+alignmentOfThePlayer: 玩家 {0} 的阵营
