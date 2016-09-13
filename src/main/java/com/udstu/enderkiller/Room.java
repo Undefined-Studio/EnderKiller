@@ -11,6 +11,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -153,6 +154,18 @@ public class Room {
         for (GameCharacter gameCharacter : gameCharacters) {
             gameCharacter.getPlayer().sendMessage(message);
         }
+    }
+
+    public List<GameCharacter> getAliveGameCharacter() {
+        List<GameCharacter> aliveGameCharacter = new ArrayList<>();
+
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
+                aliveGameCharacter.add(gameCharacter);
+            }
+        }
+
+        return aliveGameCharacter;
     }
 
     public List<GameCharacter> getGameCharacters() {

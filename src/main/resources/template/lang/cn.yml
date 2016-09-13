@@ -10,6 +10,7 @@ commandTp: 传送至当前游戏的主世界
 commandMy: 查看我的信息
 commandCurse: 巫师的技能'诅咒'
 commandResearch: 侦探的技能'调查'
+commandVote: 发起处死投票
 
 inGame: 游戏中
 waitingForStart: 等待开始
@@ -98,3 +99,11 @@ noEnough: 没有足够的 {0}
 skillLaunch: 技能 {0} 发动
 doYouWantToRescue: 玩家 {0} 中了巫毒,是否拯救? [y/n]
 alignmentOfThePlayer: 玩家 {0} 的阵营
+putToDeathVoteWarning: 请输入你想处死的玩家的名字
+putToDeathVoteTitle: 处死投票开始了,输入你想处死的玩家的名字,输入"{0}"弃权
+playerVotedToDeath: 玩家 {0} 被投票处死
+putToDeathVoteNowIsAvailable: 处死投票现在可用
+voteAlreadyLaunchedInThisDay: 今日已进行过投票
+youAreVotedToDeath: 你被投票处死
+duelVoteTitle: 请输入你想与之决斗的目标的名字,输入"{0}"弃权
+timeToDie: 死亡倒计时

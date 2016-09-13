@@ -6,6 +6,7 @@ import com.udstu.enderkiller.enumeration.Alignment;
 import com.udstu.enderkiller.enumeration.GameCharacterStatus;
 import com.udstu.enderkiller.enumeration.Occupation;
 import com.udstu.enderkiller.vote.VoteItem;
+import com.udstu.enderkiller.vote.VoteResult;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +29,7 @@ public abstract class GameCharacter {
     protected Occupation occupation = null;
     protected String yesOrNoWarning = R.getLang("pleaseInputYesOrNo");  //默认的yes和no提示
     protected int skillLaunchVoteTimeout = Integer.valueOf(R.getConfig("skillLaunchVoteTimeout"));
-    private GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
+    protected GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
     private boolean isTeamLeader = false;
 
     public GameCharacter(Player player, Room room) {
@@ -70,6 +71,21 @@ public abstract class GameCharacter {
     public void onDeath() {
         gameCharacterStatus = GameCharacterStatus.dead;
         unsetTeamLeader();
+    }
+
+    public void voteToDeath(List<VoteResult> voteResults) {
+        int voteToDieDelay = Integer.valueOf(R.getConfig("voteToDieDelay"));
+
+        player.sendMessage(R.getLang("youAreVotedToDeath"));
+        player.sendMessage(R.getLang("timeToDie") + ": " + voteToDieDelay / 20 + " s");
+
+        //延迟杀死玩家
+        thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Runnable() {
+            @Override
+            public void run() {
+                player.setHealth(0);
+            }
+        }, voteToDieDelay);
     }
 
     public Room getRoom() {

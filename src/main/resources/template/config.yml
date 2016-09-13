@@ -9,3 +9,6 @@ voteAbstainSign: -1
 teamLeaderVoteTimeout: 200 #ticks
 teamLeaderDieVoteTimeout: 200 #ticks
 skillLaunchVoteTimeout: 100 #ticks
+putToDeathVoteTimeout: 600 #ticks
+voteToDieDelay: 100 #ticks
+duelVoteTimeout: 200 #ticks

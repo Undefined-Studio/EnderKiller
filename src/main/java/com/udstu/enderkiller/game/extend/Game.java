@@ -33,6 +33,7 @@ public abstract class Game implements VoteCallBack {
     protected Alignment[] alignments = null;
     protected Occupation[] lurkers = null;
     protected Occupation[] explorers = null;
+    private SkillStatus putToDeathVoteStatus = SkillStatus.cooldown;
     private int day = 1;
     private String worldNamePrefix = null;
     private String spawnWorldName = null;
@@ -207,6 +208,8 @@ public abstract class Game implements VoteCallBack {
     public void nextDay() {
         room.broadcast(R.getLang("dayTimeCome"));
         day++;
+        putToDeathVoteStatus = SkillStatus.available;
+        room.broadcast(R.getLang("putToDeathVoteNowIsAvailable"));
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
                 gameCharacter.nextDay();
@@ -240,6 +243,11 @@ public abstract class Game implements VoteCallBack {
             player = gameCharacter.getPlayer();
             voteItems.add(new VoteItem(player.getName()));
             votePlayerAndWeights.add(new VotePlayerAndWeight(player));
+        }
+
+        //可选玩家为0时直接退出
+        if (voteItems.size() == 0) {
+            return;
         }
 
         room.broadcast(R.getLang("teamLeaderVoteTitle").replace("{0}", R.getConfig("voteAbstainSign")));
@@ -283,6 +291,45 @@ public abstract class Game implements VoteCallBack {
         teamLeader.sendMessage(playerList);
 
         server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this, Integer.valueOf(R.getConfig("teamLeaderDieVoteTimeout"))), thisPlugin);
+    }
+
+    //处死投票
+    public void putToDeathVote() {
+        Player player;
+        List<VoteItem> voteItems = new ArrayList<>();
+        List<VotePlayerAndWeight> votePlayerAndWeights = new ArrayList<>();
+        VoteCause voteCause = VoteCause.putToDeathVote;
+        String warning = R.getLang("putToDeathVoteWarning");
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            //若玩家已死亡(屠龙杀游戏角色死亡)则不参与投票也不成为投票项
+            if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {
+                continue;
+            }
+            player = gameCharacter.getPlayer();
+            voteItems.add(new VoteItem(player.getName()));
+            if (gameCharacter.isTeamLeader()) {
+                votePlayerAndWeights.add(new VotePlayerAndWeight(player, 1.5));  //队长权重1.5
+            } else {
+                votePlayerAndWeights.add(new VotePlayerAndWeight(player, 1));    //普通角色权重1
+            }
+        }
+
+        //可选玩家为0时直接退出
+        if (voteItems.size() == 0) {
+            return;
+        }
+
+        room.broadcast(R.getLang("putToDeathVoteTitle").replace("{0}", R.getConfig("voteAbstainSign")));
+        //广播可用玩家列表
+        String playerList = R.getLang("playerList") + ": ";
+        for (VoteItem voteItem : voteItems) {
+            playerList += voteItem.item + " ";
+        }
+        room.broadcast(playerList);
+
+        server.getPluginManager().registerEvents(new VoteListener(voteItems, votePlayerAndWeights, voteCause, warning, this, Integer.valueOf(R.getConfig("putToDeathVoteTimeout"))), thisPlugin);
+        putToDeathVoteStatus = SkillStatus.cooldown;
     }
 
     @Override
@@ -330,12 +377,39 @@ public abstract class Game implements VoteCallBack {
                 }
             }
             break;
+            case putToDeathVote: {
+                Vote.sort(voteResults);
+                String voteResultStr = R.getLang("voteResult") + ": ";
+                String playerName;
+                GameCharacter gameCharacter;
+
+                for (VoteResult voteResult : voteResults) {
+                    voteResultStr += voteResult.voteItem.item + "[" + voteResult.votes + "]" + " ";
+                }
+                room.broadcast(voteResultStr);
+
+                //有同票
+                if (voteResults.size() > 1 && voteResults.get(0).votes == voteResults.get(1).votes) {
+                    room.broadcast(R.getLang("thereIsSameTicket"));
+                    putToDeathVote();
+                } else if (voteResults.get(0).votes != 0) {  //第一名不为0票
+                    playerName = voteResults.get(0).voteItem.item;
+                    gameCharacter = room.getGameCharacter(playerName);
+
+                    room.broadcast(R.getLang("playerVotedToDeath").replace("{0}", playerName));
+                    gameCharacter.voteToDeath(voteResults);
+                }
+            }
         }
         room.updateScoreBoard();
     }
 
     public int getDay() {
         return day;
+    }
+
+    public SkillStatus getPutToDeathVoteStatus() {
+        return putToDeathVoteStatus;
     }
 
     public Location getMainWorldSpawnLocation() {

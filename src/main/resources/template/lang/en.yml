@@ -10,6 +10,7 @@ commandTp: Teleport to main world of current game
 commandMy: Show my info
 commandCurse: The skill 'curse' of warlock
 commandResearch: The skill 'research' of detective
+commandVote: Launch a putting to death vote
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -76,7 +77,7 @@ roomStatus: Room status
 gameTime: Game time
 location: Location
 teamLeaderVoteWarning: Please input name of the player which you want to vote for
-teamLeaderVoteTitle: Teamleader voting started, please input the name to vote.Input "{0}" to abstain from voting
+teamLeaderVoteTitle: Teamleader voting started, please input the name to vote. Input "{0}" to abstain from voting
 playerList: Player list
 voteResult: Voting result
 thereIsSameTicket: There is same ticket, vote again!
@@ -98,3 +99,11 @@ noEnough: No enough {0}
 skillLaunch: Skill {0} launched
 doYouWantToRescue: Player {0} has been poisoned, do you want to rescue? [y/n]
 alignmentOfThePlayer: Player {0} 's alignment
+putToDeathVoteWarning: Please input name of the player who you want to put to death
+putToDeathVoteTitle: Putting to Death voting started, please input the name of the player who you want to put to death. Input "{0}" to abstain from voting
+playerVotedToDeath: Player {0} voted to death
+putToDeathVoteNowIsAvailable: Put to death voting now is available
+voteAlreadyLaunchedInThisDay: Voting already has been launched in this day
+youAreVotedToDeath: You are voted to death
+duelVoteTitle: Please input name of the player who you want to duel with, Input "{0}" to abstain from voting
+timeToDie: Time to die
