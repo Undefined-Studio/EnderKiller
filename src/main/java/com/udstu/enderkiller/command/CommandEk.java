@@ -2,6 +2,7 @@ package com.udstu.enderkiller.command;
 
 import com.udstu.enderkiller.*;
 import com.udstu.enderkiller.character.DefaultGameCharacter;
+import com.udstu.enderkiller.character.Detective;
 import com.udstu.enderkiller.character.Warlock;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.GameCharacterStatus;
@@ -288,8 +289,62 @@ public class CommandEk implements CommandExecutor {
             return;
         }
         targetGameCharacter = targetRoom.getGameCharacter(targetPlayerName);
+        if (targetGameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {    //目标已死亡
+            commandSender.sendMessage(R.getLang("targetAlreadyDie"));
+            return;
+        }
 
         warlock.curse(targetGameCharacter);
+    }
+
+    //侦探 技能 调查 /ek research
+    private void commandResearch(CommandSender commandSender, Command command, String label, String[] args) {
+        Room room = Util.searchPlayer(commandSender.getName());
+        Room targetRoom;
+        GameCharacter gameCharacter;
+        GameCharacter targetGameCharacter;
+        Detective detective;
+        String targetPlayerName;
+
+        //检测是否可以发动技能
+        if (room == null) { //不在房间中
+            commandSender.sendMessage(R.getLang("notInARoom"));
+            return;
+        }
+        if ((room.getRoomStatus() != RoomStatus.inGame)) {  //游戏未开始
+            commandSender.sendMessage(R.getLang("gameNotStart"));
+            return;
+        }
+        gameCharacter = room.getGameCharacter(commandSender.getName());
+        if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
+            commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+
+        if (gameCharacter.getOccupation() != Occupation.detective) {   //不为巫师
+            commandSender.sendMessage(R.getLang("occupationError"));
+            return;
+        }
+        detective = (Detective) gameCharacter;
+
+        //检验参数是否合法
+        if (args.length < 2) {
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " curse <" + R.getLang("playerName") + ">");
+            return;
+        }
+        targetPlayerName = args[1];
+        targetRoom = Util.searchPlayer(targetPlayerName);
+        if (targetRoom != room) { //目标玩家不存在或不和命令发起者在一个房间中
+            commandSender.sendMessage(R.getLang("targetPlayerNotInTheSameRoomWithYou"));
+            return;
+        }
+        targetGameCharacter = targetRoom.getGameCharacter(targetPlayerName);
+        if (targetGameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {    //目标已死亡
+            commandSender.sendMessage(R.getLang("targetAlreadyDie"));
+            return;
+        }
+
+        detective.research(targetGameCharacter);
     }
 
     @Override
@@ -360,6 +415,14 @@ public class CommandEk implements CommandExecutor {
                 case "curse": {
                     if (Player.class.isInstance(commandSender)) {
                         commandCurse(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "research": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandResearch(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }

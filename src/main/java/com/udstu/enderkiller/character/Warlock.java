@@ -38,12 +38,6 @@ public class Warlock extends GameCharacter {
     public void curse(GameCharacter targetGameCharacter) {
         PlayerInventory playerInventory = player.getInventory();
 
-        //对象已死亡
-        if (targetGameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {
-            player.sendMessage(R.getLang("targetAlreadyDie"));
-            return;
-        }
-
         //技能是否冷却完毕
         if (curseStatus != SkillStatus.available) {
             player.sendMessage(R.getLang("skillCooldown"));

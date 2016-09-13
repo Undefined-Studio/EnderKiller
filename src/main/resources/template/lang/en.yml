@@ -9,6 +9,7 @@ commandStart: Start game
 commandTp: Teleport to main world of current game
 commandMy: Show my info
 commandCurse: The skill 'curse' of warlock
+commandResearch: The skill 'research' of detective
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -29,6 +30,8 @@ fighter: Fighter
 
 curse: Curse
 rescue: Rescue
+research: Research
+duel: Duel
 
 alive: Alive
 dead: Dead
@@ -92,5 +95,6 @@ skillCoolDownComplete: Skill {0} cooldown complete
 targetAlreadyDie: Target already die
 skillCooldown: Skill cooldown
 noEnough: No enough {0}
-skillLaunch: Skill {0} launch
+skillLaunch: Skill {0} launched
 doYouWantToRescue: Player {0} has been poisoned, do you want to rescue? [y/n]
+alignmentOfThePlayer: Player {0} 's alignment
