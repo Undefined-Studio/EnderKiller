@@ -107,3 +107,9 @@ voteAlreadyLaunchedInThisDay: Voting already has been launched in this day
 youAreVotedToDeath: You are voted to death
 duelVoteTitle: Please input name of the player who you want to duel with, Input "{0}" to abstain from voting
 timeToDie: Time to die
+playerIsFighter: Player {0} is fighter
+FighterDuelWith: Fighter {0} duel with {1}
+youAreSelectedAsDuelTarget: You are selected as duel target
+timeToTeleport: Time to teleport
+playerPutToDeath: Player {0} is putted to death
+fighterBecomeOutsideLawFighter: Fighter {0} become outside law fighter

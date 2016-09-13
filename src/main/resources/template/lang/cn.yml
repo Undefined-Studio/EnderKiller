@@ -107,3 +107,9 @@ voteAlreadyLaunchedInThisDay: 今日已进行过投票
 youAreVotedToDeath: 你被投票处死
 duelVoteTitle: 请输入你想与之决斗的目标的名字,输入"{0}"弃权
 timeToDie: 死亡倒计时
+playerIsFighter: 玩家 {0} 是斗士
+FighterDuelWith: 斗士 {0} 与 {1} 决斗
+youAreSelectedAsDuelTarget: 你被选为了决斗目标
+timeToTeleport: 传送倒计时
+playerPutToDeath: 玩家 {0} 被处死
+fighterBecomeOutsideLawFighter: 斗士 {0} 成为法外斗士

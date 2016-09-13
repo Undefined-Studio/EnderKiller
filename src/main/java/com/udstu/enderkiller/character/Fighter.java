@@ -86,11 +86,21 @@ public class Fighter extends GameCharacter implements VoteCallBack, DeathEventCa
 
     //斗士 技能 决斗
     public void duel(GameCharacter targetGameCharacter) {
+        int teleportDelay = Integer.valueOf("teleportDelay");
         targetPlayer = targetGameCharacter.getPlayer();
 
-        room.broadcast("斗士发动了决斗,目标是 " + targetPlayer.getName());
-        targetPlayer.sendMessage("你被选为决斗目标");
-        targetPlayer.teleport(player);
+        room.broadcast(R.getLang("playerIsFighter").replace("{0}", player.getName()));
+        room.broadcast(R.getLang("FighterDuelWith").replace("{0}", player.getName()).replace("{1}", targetGameCharacter.getPlayer().getName()));
+        targetPlayer.sendMessage(R.getLang("youAreSelectedAsDuelTarget"));
+        targetPlayer.sendMessage(R.getLang("timeToTeleport") + ": " + teleportDelay);
+
+        //延迟传送
+        thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Runnable() {
+            @Override
+            public void run() {
+                targetPlayer.teleport(player);
+            }
+        }, teleportDelay);
 
         //添加对这两人的决斗死亡监听器
         thisPlugin.getServer().getPluginManager().registerEvents(new DeathListener(Arrays.asList(player, targetPlayer), this), thisPlugin);
@@ -102,12 +112,12 @@ public class Fighter extends GameCharacter implements VoteCallBack, DeathEventCa
         if (room.getAliveGameCharacter().size() > 1) {
             //若斗士存活,则杀死
             if (gameCharacterStatus == GameCharacterStatus.alive) {
-                room.broadcast(player.getName() + "被处死");
+                room.broadcast(R.getLang("playerPutToDeath").replace("{0}", player.getName()));
                 player.setHealth(0);
             }
         } else {   //场上仅剩下斗士时
             if (gameCharacterStatus == GameCharacterStatus.alive) {
-                room.broadcast(player.getName() + " 成为法外斗士");
+                room.broadcast(R.getLang("fighterBecomeOutsideLawFighter").replace("{0}", player.getName()));
             }
         }
     }
