@@ -57,17 +57,22 @@ public class Warlock extends GameCharacter {
         player.sendMessage(R.getLang("skillLaunch").replace("{0}", R.getLang("curse")));
 
         //TODO 这里假设在所有人场游戏中,牧师仅有一个.
-        //获得存活并不为目标的牧师
+        //有牧师可用时进入牧师的rescue方法
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             if (gameCharacter != targetGameCharacter && gameCharacter.getOccupation() == Occupation.priest && gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
-                //尝试发动此牧师的技能,发动失败时直接杀死目标
-                if (!((Priest) gameCharacter).rescue(targetGameCharacter)) {
-                    targetGameCharacter.getPlayer().setHealth(0);
+                //尝试发动此牧师的技能,可发动则退出
+                if (((Priest) gameCharacter).rescue(targetGameCharacter)) {
+                    return;
                 }
-                return;
+
             }
         }
-        //若无可用牧师,直接杀死目标
-        targetGameCharacter.getPlayer().setHealth(0);
+        //若无可用牧师,延迟杀死目标
+        thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Runnable() {
+            @Override
+            public void run() {
+                targetGameCharacter.getPlayer().setHealth(0);
+            }
+        }, Integer.valueOf(R.getConfig("skillLaunchVoteTimeout")))
     }
 }
