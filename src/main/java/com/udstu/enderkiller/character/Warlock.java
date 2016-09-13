@@ -73,6 +73,6 @@ public class Warlock extends GameCharacter {
             public void run() {
                 targetGameCharacter.getPlayer().setHealth(0);
             }
-        }, Integer.valueOf(R.getConfig("skillLaunchVoteTimeout")))
+        }, Integer.valueOf(R.getConfig("skillLaunchVoteTimeout")));
     }
 }

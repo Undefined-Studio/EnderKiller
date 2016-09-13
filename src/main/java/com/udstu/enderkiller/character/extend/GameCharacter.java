@@ -2,6 +2,7 @@ package com.udstu.enderkiller.character.extend;
 
 import com.udstu.enderkiller.R;
 import com.udstu.enderkiller.Room;
+import com.udstu.enderkiller.character.extend.extend.TeamLeader;
 import com.udstu.enderkiller.enumeration.Alignment;
 import com.udstu.enderkiller.enumeration.GameCharacterStatus;
 import com.udstu.enderkiller.enumeration.Occupation;
@@ -20,17 +21,15 @@ import java.util.List;
  * Created by czp on 16-8-12.
  * 所有职业的父类
  */
-public abstract class GameCharacter {
+public abstract class GameCharacter extends TeamLeader {
     protected static List<VoteItem> yesOrNoVoteItem = Arrays.asList(new VoteItem("y"), new VoteItem("n"));    //默认的yes和no选项
     protected Plugin thisPlugin = R.getMainClass();
     protected Room room = null;
-    protected Player player = null;
     protected Alignment alignment = null;
     protected Occupation occupation = null;
     protected String yesOrNoWarning = R.getLang("pleaseInputYesOrNo");  //默认的yes和no提示
     protected int skillLaunchVoteTimeout = Integer.valueOf(R.getConfig("skillLaunchVoteTimeout"));
     protected GameCharacterStatus gameCharacterStatus = GameCharacterStatus.alive;
-    private boolean isTeamLeader = false;
 
     public GameCharacter(Player player, Room room) {
         this.room = room;
@@ -112,30 +111,7 @@ public abstract class GameCharacter {
         return gameCharacterStatus;
     }
 
-    public void setGameCharacterStatus(GameCharacterStatus gameCharacterStatus) {
-        this.gameCharacterStatus = gameCharacterStatus;
-    }
-
     public Occupation getOccupation() {
         return occupation;
-    }
-
-    public boolean isTeamLeader() {
-        return isTeamLeader;
-    }
-
-    public void setTeamLeader() {
-        if (!isTeamLeader()) {
-            player.setMaxHealth(player.getMaxHealth() + 10);
-            player.setHealth(player.getHealth() + 10);
-        }
-        isTeamLeader = true;
-    }
-
-    public void unsetTeamLeader() {
-        if (isTeamLeader()) {
-            player.setMaxHealth(player.getMaxHealth() - 10);
-        }
-        isTeamLeader = false;
     }
 }
