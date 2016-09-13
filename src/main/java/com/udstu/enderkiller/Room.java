@@ -175,6 +175,10 @@ public class Room {
         return roomStatus;
     }
 
+    public void setRoomStatus(RoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
+    }
+
     public Game getGame() {
         return game;
     }

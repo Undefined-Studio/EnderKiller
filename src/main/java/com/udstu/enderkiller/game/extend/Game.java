@@ -4,10 +4,7 @@ import com.udstu.enderkiller.R;
 import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.Util;
 import com.udstu.enderkiller.character.extend.GameCharacter;
-import com.udstu.enderkiller.enumeration.Alignment;
-import com.udstu.enderkiller.enumeration.GameCharacterStatus;
-import com.udstu.enderkiller.enumeration.Occupation;
-import com.udstu.enderkiller.enumeration.VoteCause;
+import com.udstu.enderkiller.enumeration.*;
 import com.udstu.enderkiller.task.TimeLapseTask;
 import com.udstu.enderkiller.vote.*;
 import com.udstu.enderkiller.vote.implement.VoteCallBack;
@@ -188,7 +185,13 @@ public abstract class Game implements VoteCallBack {
     }
 
     public void over() {
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            gameCharacter.unsetTeamLeader();
+        }
+
         removeTimeLapseTask();
+        room.setRoomStatus(RoomStatus.waitingForStart);
+        room.setGame(null);
     }
 
     private boolean removeTimeLapseTask() {

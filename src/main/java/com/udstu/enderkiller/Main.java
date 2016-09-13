@@ -2,6 +2,7 @@ package com.udstu.enderkiller;
 
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.command.CommandEk;
+import com.udstu.enderkiller.enumeration.RoomStatus;
 import com.udstu.enderkiller.listener.PlayerDeathListener;
 import com.udstu.enderkiller.listener.PlayerJoinListener;
 import com.udstu.enderkiller.listener.PlayerPortalListener;
@@ -29,8 +30,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         for (Room room : Lobby.getRoomList()) {
-            for (GameCharacter gameCharacter : room.getGameCharacters()) {
-                gameCharacter.onDeath();
+            if (room.getRoomStatus() == RoomStatus.inGame) {
+                for (GameCharacter gameCharacter : room.getGameCharacters()) {
+                    gameCharacter.unsetTeamLeader();
+                }
             }
         }
     }
