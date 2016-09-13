@@ -208,7 +208,9 @@ public abstract class Game implements VoteCallBack {
         room.broadcast(R.getLang("dayTimeCome"));
         day++;
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
-            gameCharacter.nextDay();
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
+                gameCharacter.nextDay();
+            }
         }
         room.updateScoreBoard();
     }
@@ -216,7 +218,9 @@ public abstract class Game implements VoteCallBack {
     public void nextNight() {
         room.broadcast(R.getLang("nightTimeCome"));
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
-            gameCharacter.nextNight();
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
+                gameCharacter.nextNight();
+            }
         }
     }
 
