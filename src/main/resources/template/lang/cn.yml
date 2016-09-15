@@ -118,3 +118,4 @@ fighterBecomeOutsideLawFighter: 斗士 {0} 成为法外斗士
 youAreNotTeamLeader: 你不是队长
 teamLeaderStartSummon: 队长 {0} 开始集结玩家
 summonIsCanceled: 传送被取消了
+canNotLaunchVoteWhileSlaughteringDragon: 屠龙阶段不允许投票

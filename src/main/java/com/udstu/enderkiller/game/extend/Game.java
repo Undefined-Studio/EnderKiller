@@ -33,6 +33,7 @@ public abstract class Game implements VoteCallBack {
     protected Alignment[] alignments = null;
     protected Occupation[] lurkers = null;
     protected Occupation[] explorers = null;
+    private GameStatus gameStatus = GameStatus.notStart;
     private SkillStatus putToDeathVoteStatus = SkillStatus.cooldown;
     private int day = 1;
     private String worldNamePrefix = null;
@@ -62,6 +63,8 @@ public abstract class Game implements VoteCallBack {
     }
 
     public void start() {
+        gameStatus = GameStatus.prepare;
+
         //log
         thisPlugin.getLogger().info("房间 " + room.getId() + " 开始了游戏");
 
@@ -221,6 +224,12 @@ public abstract class Game implements VoteCallBack {
                 gameCharacter.nextDay();
             }
         }
+
+        //第二天天亮进入远征阶段
+        if (day == 2) {
+            gameStatus = GameStatus.processing;
+        }
+
         room.updateScoreBoard();
     }
 
@@ -420,6 +429,14 @@ public abstract class Game implements VoteCallBack {
 
     public Location getMainWorldSpawnLocation() {
         return mainWorldSpawnLocation;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     //内部类,用作结构体

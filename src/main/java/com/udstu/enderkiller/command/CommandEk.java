@@ -5,10 +5,7 @@ import com.udstu.enderkiller.character.DefaultGameCharacter;
 import com.udstu.enderkiller.character.Detective;
 import com.udstu.enderkiller.character.Warlock;
 import com.udstu.enderkiller.character.extend.GameCharacter;
-import com.udstu.enderkiller.enumeration.GameCharacterStatus;
-import com.udstu.enderkiller.enumeration.Occupation;
-import com.udstu.enderkiller.enumeration.RoomStatus;
-import com.udstu.enderkiller.enumeration.SkillStatus;
+import com.udstu.enderkiller.enumeration.*;
 import com.udstu.enderkiller.game.extend.Game;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -370,6 +367,10 @@ public class CommandEk implements CommandExecutor {
         gameCharacter = room.getGameCharacter(commandSender.getName());
         if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
             commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+        if (game.getGameStatus() == GameStatus.slaughterDragon) {    //屠龙阶段不允许投票
+            commandSender.sendMessage(R.getLang("canNotLaunchVoteWhileSlaughteringDragon"));
             return;
         }
         if (game.getPutToDeathVoteStatus() != SkillStatus.available) {  //游戏当前天投票可用
