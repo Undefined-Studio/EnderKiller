@@ -10,6 +10,7 @@ import com.udstu.enderkiller.enumeration.Occupation;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import com.udstu.enderkiller.enumeration.SkillStatus;
 import com.udstu.enderkiller.game.extend.Game;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -354,6 +355,7 @@ public class CommandEk implements CommandExecutor {
         Room room = Util.searchPlayer(commandSender.getName());
         Game game;
         GameCharacter gameCharacter;
+        Player player = (Player) commandSender;
 
         //检测是否可以发动技能
         if (room == null) { //不在房间中
@@ -370,8 +372,14 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("youAreDead"));
             return;
         }
-        if (game.getPutToDeathVoteStatus() != SkillStatus.available) {
+        if (game.getPutToDeathVoteStatus() != SkillStatus.available) {  //游戏当前天投票可用
             commandSender.sendMessage(R.getLang("voteAlreadyLaunchedInThisDay"));
+            return;
+        }
+        if (player.getInventory().contains(Material.NETHER_STAR)) { //投票发起者拥有下界之星,则扣除一个
+            player.getInventory().remove(Material.NETHER_STAR);
+        } else {
+            player.sendMessage(R.getLang("noEnough").replace("{0}", Material.NETHER_STAR.toString()));
             return;
         }
 
