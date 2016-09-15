@@ -148,11 +148,11 @@ public class VoteListener implements Listener, TimerCallBack {
         }
         HandlerList.unregisterAll(this);
         //回调函数.加入计划任务使其变为同步
-        thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Runnable() {
+        thisPlugin.getServer().getScheduler().runTask(thisPlugin, new Runnable() {
             @Override
             public void run() {
                 voteCallBack.voteCallBack(voteResults, voteCause);
             }
-        }, 1);
+        });
     }
 }

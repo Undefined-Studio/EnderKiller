@@ -11,6 +11,7 @@ commandMy: Show my info
 commandCurse: The skill 'curse' of warlock
 commandResearch: The skill 'research' of detective
 commandVote: Launch a putting to death vote
+commandSummon: The skill 'summon' of teamleader
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -29,6 +30,7 @@ detective: Detective
 teacher: Teacher
 fighter: Fighter
 
+summon: summon
 curse: Curse
 rescue: Rescue
 research: Research
@@ -113,3 +115,6 @@ youAreSelectedAsDuelTarget: You are selected as duel target
 timeToTeleport: Time to teleport
 playerPutToDeath: Player {0} is putted to death
 fighterBecomeOutsideLawFighter: Fighter {0} become outside law fighter
+youAreNotTeamLeader: You are not team leader
+teamLeaderStartSummon: Team leader {0} started to summon all players
+summonIsCanceled: Summon is canceled

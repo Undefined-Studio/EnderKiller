@@ -212,6 +212,12 @@ public abstract class Game implements VoteCallBack {
         room.broadcast(R.getLang("putToDeathVoteNowIsAvailable"));
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
+                //若角色为队长,刷新其 召集 技能
+                if (gameCharacter.isTeamLeader()) {
+                    gameCharacter.setSummonStatus(SkillStatus.available);
+                    gameCharacter.getPlayer().sendMessage(R.getLang("skillCoolDownComplete").replace("{0}", R.getLang("summon")));
+                }
+
                 gameCharacter.nextDay();
             }
         }

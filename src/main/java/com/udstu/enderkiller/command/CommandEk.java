@@ -378,6 +378,33 @@ public class CommandEk implements CommandExecutor {
         game.putToDeathVote();
     }
 
+    //队长 技能 召唤
+    private void commandSummon(CommandSender commandSender, Command command, String label, String[] args) {
+        Room room = Util.searchPlayer(commandSender.getName());
+        GameCharacter gameCharacter;
+
+        //检测是否可以发动技能
+        if (room == null) { //不在房间中
+            commandSender.sendMessage(R.getLang("notInARoom"));
+            return;
+        }
+        if ((room.getRoomStatus() != RoomStatus.inGame)) {  //游戏未开始
+            commandSender.sendMessage(R.getLang("gameNotStart"));
+            return;
+        }
+        gameCharacter = room.getGameCharacter(commandSender.getName());
+        if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
+            commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+        if (!gameCharacter.isTeamLeader()) {    //不是队长
+            commandSender.sendMessage(R.getLang("youAreNotTeamLeader"));
+            return;
+        }
+
+        gameCharacter.summon();
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -462,6 +489,14 @@ public class CommandEk implements CommandExecutor {
                 case "vote": {
                     if (Player.class.isInstance(commandSender)) {
                         commandVote(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "summon": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandSummon(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }
