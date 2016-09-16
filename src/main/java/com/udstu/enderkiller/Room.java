@@ -131,10 +131,12 @@ public class Room {
 
     //开始游戏
     public boolean startGame() {
-        //房间未满或不为等待开始状态时无法开始游戏
-//        if (!isFull() || roomStatus != RoomStatus.waitingForStart) {
-//            return false;
-//        }
+        if (!Boolean.valueOf(R.getConfig("canGameStartWhenRoomNotFull"))) {
+            //房间未满或不为等待开始状态时无法开始游戏
+            if (!isFull() || roomStatus != RoomStatus.waitingForStart) {
+                return false;
+            }
+        }
 
         roomStatus = RoomStatus.inGame;
 

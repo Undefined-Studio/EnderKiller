@@ -1,6 +1,7 @@
 lang: en  #Support en,cn
 maxRooms: 5
 spawnWorldSeed: 759242905499401623
+canGameStartWhenRoomNotFull: true #for test only
 worldNamePrefix: enderkill_world
 spawnWorldName: enderkill_world_spawn
 initMoneyType: EMERALD
@@ -18,4 +19,4 @@ rewardType: IRON_INGOT
 rewardAmount: 64
 rewardExp: 999
 gameOverDelay: 200 #ticks
-deleteWorldsAfterGame: false #ticks
+deleteWorldsAfterGame: false
