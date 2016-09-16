@@ -75,6 +75,7 @@ public abstract class Game implements VoteCallBack {
         tpPlayersToSpawnWorld();
         allocateOccupation();
         giveInitMoney();
+        toldTeamMates();
         registerTimeLapseTask();
         launchTeamLeaderVote();
 
@@ -178,6 +179,30 @@ public abstract class Game implements VoteCallBack {
 
             //给予职业特殊初始物品
             gameCharacter.giveInitItems();
+        }
+    }
+
+    //告知所有潜伏者全部潜伏者信息
+    private void toldTeamMates() {
+        List<String> occupationInfos = new ArrayList<>();
+        List<GameCharacter> gameCharacters = room.getGameCharacters();
+        GameCharacter gameCharacter;
+        String[] occupationInfosStrArray;
+
+        for (int i = 0; i < gameCharacters.size(); i++) {
+            gameCharacter = gameCharacters.get(i);
+            if (gameCharacter.getAlignment() == Alignment.lurker) {
+                occupationInfos.add("[" + i + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
+            }
+        }
+
+        occupationInfosStrArray = occupationInfos.toArray(new String[occupationInfos.size()]);
+
+        for (GameCharacter gameCharacter1 : gameCharacters) {
+            if (gameCharacter1.getAlignment() == Alignment.lurker) {
+                gameCharacter1.getPlayer().sendMessage(R.getLang("occupationInfo") + ": ");
+                gameCharacter1.getPlayer().sendMessage(occupationInfosStrArray);
+            }
         }
     }
 
@@ -430,7 +455,7 @@ public abstract class Game implements VoteCallBack {
     }
 
     //分发游戏奖励
-    public void reward() {
+    private void reward() {
         Player player;
         Material material = Material.valueOf(R.getConfig("rewardType"));
         int amount = Integer.valueOf(R.getConfig("rewardAmount"));
@@ -448,7 +473,7 @@ public abstract class Game implements VoteCallBack {
     }
 
     //广播所有角色信息
-    public void broadcastCharacterInfo() {
+    private void broadcastCharacterInfo() {
         List<GameCharacter> gameCharacters = room.getGameCharacters();
         GameCharacter gameCharacter;
 
