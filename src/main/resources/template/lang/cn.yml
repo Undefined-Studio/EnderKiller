@@ -119,3 +119,6 @@ youAreNotTeamLeader: 你不是队长
 teamLeaderStartSummon: 队长 {0} 开始集结玩家
 summonIsCanceled: 传送被取消了
 canNotLaunchVoteWhileSlaughteringDragon: 屠龙阶段不允许投票
+alignmentWin: 阵营 {0} 获胜
+occupationInfo: 职业信息
+gameOver: 游戏结束

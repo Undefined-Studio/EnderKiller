@@ -119,3 +119,6 @@ youAreNotTeamLeader: You are not team leader
 teamLeaderStartSummon: Team leader {0} started to summon all players
 summonIsCanceled: Summon is canceled
 canNotLaunchVoteWhileSlaughteringDragon: Can not launch vote while slaughtering dragon
+alignmentWin: Alignment {0} win!
+occupationInfo: Occupation info
+gameOver: Game over

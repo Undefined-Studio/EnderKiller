@@ -42,6 +42,11 @@ public abstract class GameCharacter {
         this.player = player;
     }
 
+    public GameCharacter(GameCharacter gameCharacter) {
+        this.room = gameCharacter.getRoom();
+        this.player = gameCharacter.getPlayer();
+    }
+
     public GameCharacter(GameCharacter gameCharacter, Alignment alignment) {
         this.room = gameCharacter.getRoom();
         this.player = gameCharacter.getPlayer();
@@ -135,6 +140,11 @@ public abstract class GameCharacter {
         summonTask = thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new SummonTask(room.getGameCharacters(), this), teamLeaderSummonDelay);
 
         room.broadcast(R.getLang("timeToTeleport") + ": " + teamLeaderSummonDelay);
+    }
+
+    //游戏结束时执行
+    public void gameOver() {
+        unsetTeamLeader();
     }
 
     public void setSummonStatus(SkillStatus summonStatus) {

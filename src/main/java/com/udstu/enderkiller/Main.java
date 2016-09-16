@@ -3,10 +3,7 @@ package com.udstu.enderkiller;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.command.CommandEk;
 import com.udstu.enderkiller.enumeration.RoomStatus;
-import com.udstu.enderkiller.listener.PlayerDeathListener;
-import com.udstu.enderkiller.listener.PlayerJoinListener;
-import com.udstu.enderkiller.listener.PlayerPortalListener;
-import com.udstu.enderkiller.listener.PlayerQuitListener;
+import com.udstu.enderkiller.listener.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -21,6 +18,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerPortalListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new DragonDeathListener(), this);
 
         //传入主类(指本类)引用至Config,并执行一次配置文件载入
         Config.setMainClass(this);

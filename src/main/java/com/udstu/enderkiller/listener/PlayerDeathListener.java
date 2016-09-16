@@ -1,5 +1,6 @@
 package com.udstu.enderkiller.listener;
 
+import com.udstu.enderkiller.R;
 import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.Util;
 import com.udstu.enderkiller.character.extend.GameCharacter;
@@ -36,6 +37,13 @@ public class PlayerDeathListener implements Listener {
 
             //更新计分板
             room.updateScoreBoard();
+            //检查游戏是否结束.使用计划任务保持顺序
+            R.getMainClass().getServer().getScheduler().runTask(R.getMainClass(), new Runnable() {
+                @Override
+                public void run() {
+                    room.getGame().checkGameOver();
+                }
+            });
         }
     }
 }

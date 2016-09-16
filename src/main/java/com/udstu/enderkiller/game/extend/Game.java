@@ -3,6 +3,7 @@ package com.udstu.enderkiller.game.extend;
 import com.udstu.enderkiller.R;
 import com.udstu.enderkiller.Room;
 import com.udstu.enderkiller.Util;
+import com.udstu.enderkiller.character.DefaultGameCharacter;
 import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.*;
 import com.udstu.enderkiller.task.TimeLapseTask;
@@ -12,15 +13,14 @@ import com.udstu.enderkiller.worldcreator.MainWorldCreator;
 import com.udstu.enderkiller.worldcreator.NetherWorldCreator;
 import com.udstu.enderkiller.worldcreator.SpawnWorldCreator;
 import com.udstu.enderkiller.worldcreator.TheEndWorldCreator;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
-import org.bukkit.World;
+import org.apache.commons.io.FileUtils;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,9 @@ public abstract class Game implements VoteCallBack {
     private World mainWorld = null;
     private Location mainWorldSpawnLocation = null;
     private String netherWorldName = null;
+    private World netherWorld = null;
     private String theEndWorldName = null;
+    private World theEndWorld = null;
     private Plugin thisPlugin = null;
     private Server server = null;
     private BukkitTask timeLapseTask = null;
@@ -105,10 +107,10 @@ public abstract class Game implements VoteCallBack {
         mainWorld.setTime(13800);
 
         room.broadcast(R.getLang("loadingWorld") + ": " + netherWorldName);
-        server.createWorld(new NetherWorldCreator(netherWorldName));
+        netherWorld = server.createWorld(new NetherWorldCreator(netherWorldName));
 
         room.broadcast(R.getLang("loadingWorld") + ": " + theEndWorldName);
-        server.createWorld(new TheEndWorldCreator(theEndWorldName));
+        theEndWorld = server.createWorld(new TheEndWorldCreator(theEndWorldName));
     }
 
     private void tpPlayersToSpawnWorld() {
@@ -186,16 +188,6 @@ public abstract class Game implements VoteCallBack {
         } else {
             return false;
         }
-    }
-
-    public void over() {
-        for (GameCharacter gameCharacter : room.getGameCharacters()) {
-            gameCharacter.unsetTeamLeader();
-        }
-
-        removeTimeLapseTask();
-        room.setRoomStatus(RoomStatus.waitingForStart);
-        room.setGame(null);
     }
 
     private boolean removeTimeLapseTask() {
@@ -417,6 +409,121 @@ public abstract class Game implements VoteCallBack {
             }
         }
         room.updateScoreBoard();
+    }
+
+    //游戏结束
+    public void gameOver(Alignment alignment) {
+        long gameOverDelay = Long.valueOf(R.getConfig("gameOverDelay"));
+
+        room.broadcast(R.getLang("gameOver"));
+        room.broadcast(R.getLang("alignmentWin").replace("{0}", alignment.toString()));
+
+        reward();
+        broadcastCharacterInfo();
+        room.broadcast(R.getLang("timeToTeleport") + ": " + gameOverDelay / 20 + "s");
+        server.getScheduler().runTaskLater(thisPlugin, new Runnable() {
+            @Override
+            public void run() {
+                over();
+            }
+        }, gameOverDelay);
+    }
+
+    //分发游戏奖励
+    public void reward() {
+        Player player;
+        Material material = Material.valueOf(R.getConfig("rewardType"));
+        int amount = Integer.valueOf(R.getConfig("rewardAmount"));
+        int exp = Integer.valueOf(R.getConfig("rewardExp"));
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            player = gameCharacter.getPlayer();
+            //分发奖励物品
+            player.getInventory().addItem(new ItemStack(material, amount));
+            player.sendMessage(R.getLang("youGet") + ": " + material.toString() + " * " + amount);
+            //分发奖励经验值
+            player.setTotalExperience(player.getTotalExperience() + exp);
+            player.sendMessage(R.getLang("youGet") + ": " + "Exp" + " * " + exp);
+        }
+    }
+
+    //广播所有角色信息
+    public void broadcastCharacterInfo() {
+        List<GameCharacter> gameCharacters = room.getGameCharacters();
+        GameCharacter gameCharacter;
+
+        room.broadcast(R.getLang("occupationInfo") + ": ");
+        for (int i = 0; i < gameCharacters.size(); i++) {
+            gameCharacter = gameCharacters.get(i);
+            room.broadcast("[" + i + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
+        }
+    }
+
+    //退出游戏
+    public void over() {
+        World defaultWorld = server.getWorlds().get(0);
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            gameCharacter.gameOver();
+        }
+
+        //传送玩家至主世界
+        room.broadcast(R.getLang("teleporting"));
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            //TODO 简单的传送至出生点所在处的最高的方块所在处,应实现安全传送功能.
+            gameCharacter.getPlayer().teleport(defaultWorld.getHighestBlockAt(defaultWorld.getSpawnLocation()).getLocation());
+        }
+
+        //卸载世界
+        server.unloadWorld(mainWorld, false);
+        server.unloadWorld(netherWorld, false);
+        server.unloadWorld(theEndWorld, false);
+
+        if (Boolean.valueOf(R.getConfig("deleteWorldsAfterGame"))) {
+            //删除世界
+            File worldFolder = Bukkit.getWorldContainer();
+            File mainWorldFolder = new File(worldFolder, mainWorldName);
+            File netherWorldFolder = new File(worldFolder, netherWorldName);
+            File theEndWorldFolder = new File(worldFolder, theEndWorldName);
+            try {
+                FileUtils.deleteDirectory(mainWorldFolder);
+                FileUtils.deleteDirectory(netherWorldFolder);
+                FileUtils.deleteDirectory(theEndWorldFolder);
+            } catch (Exception e) {
+                thisPlugin.getLogger().warning("房间 " + room.getId() + " 的一部分地图在游戏后未能删除");
+            }
+        }
+
+        //取消本局游戏开启的任务
+        removeTimeLapseTask();
+
+        //重置角色
+        for (int i = 0; i < room.getGameCharacters().size(); i++) {
+            room.getGameCharacters().set(i, new DefaultGameCharacter(room.getGameCharacters().get(i)));
+        }
+
+        //重置房间状态
+        room.setRoomStatus(RoomStatus.waitingForStart);
+        room.setGame(null);
+        room.updateScoreBoard();
+    }
+
+    //判断游戏是否结束
+    public void checkGameOver() {
+        boolean isAnyExplorerAlive = false;
+
+        //获取是否有探险家存活
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive && gameCharacter.getAlignment() == Alignment.explorer) {
+                isAnyExplorerAlive = true;
+                break;
+            }
+        }
+
+        //探险家全部阵亡,游戏结束
+        if (!isAnyExplorerAlive) {
+            gameOver(Alignment.lurker);
+        }
     }
 
     public int getDay() {

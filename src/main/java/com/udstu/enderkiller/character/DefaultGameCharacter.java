@@ -9,6 +9,10 @@ import org.bukkit.entity.Player;
  * 用于生成实际职业之前的替代
  */
 public class DefaultGameCharacter extends GameCharacter {
+    public DefaultGameCharacter(GameCharacter gameCharacter) {
+        super(gameCharacter);
+    }
+
     public DefaultGameCharacter(Player player, Room room) {
         super(player, room);
     }
