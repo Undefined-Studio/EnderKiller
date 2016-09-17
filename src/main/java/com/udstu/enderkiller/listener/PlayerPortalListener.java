@@ -1,6 +1,8 @@
 package com.udstu.enderkiller.listener;
 
 import com.udstu.enderkiller.R;
+import com.udstu.enderkiller.Util;
+import com.udstu.enderkiller.enumeration.GameStatus;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -13,7 +15,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
  * Change the destination of portals in game
  */
 public class PlayerPortalListener implements Listener {
-    //The code from Multiworld
+    //使用插件 Multiworld 的部分代码
     private static PortalType getPortalType(Location location) {
         Block block = location.getBlock();
         Material material;
@@ -45,25 +47,27 @@ public class PlayerPortalListener implements Listener {
         int indexOfThirdUnderline;
 
         try {
-            if (!worldName.equals(spawnWorldName) && worldName.substring(0, worldNamePrefix.length()).equals(worldNamePrefix)) {
+            if (!worldName.equals(spawnWorldName) && worldName.substring(0, worldNamePrefix.length()).equals(worldNamePrefix)) {    //当事件触发于EnderKiller插件生成的世界中时
                 indexOfThirdUnderline = worldName.indexOf("_", worldNamePrefix.length() + 1);
                 roomWorldNamePrefix = worldName.substring(0, indexOfThirdUnderline);
                 mainWorldName = roomWorldNamePrefix + "_main";
                 netherWorldName = roomWorldNamePrefix + "_nether";
                 theEndWorldName = roomWorldNamePrefix + "_the_end";
 
-                if (worldName.equals(mainWorldName)) {
-                    if (getPortalType(location) == PortalType.NETHER) {
+                if (worldName.equals(mainWorldName)) {  //当此世界是主世界时
+                    if (getPortalType(location) == PortalType.NETHER) { //当此传送门为地狱门时
                         location.setWorld(server.getWorld(netherWorldName));
                         location.setX(location.getX() / 8);
                         location.setZ(location.getZ() / 8);
                         location = travelAgent.findOrCreate(location);
-                    } else if (getPortalType(location) == PortalType.ENDER) {
+                    } else if (getPortalType(location) == PortalType.ENDER) {   //当此传送门为末地门时
                         //(100,54,0)是默认的末地出生点
                         location = new Location(server.getWorld(theEndWorldName), 100, 54, 0);
+                        //当有人进入末地时,改变对应房间的游戏的状态至屠龙阶段
+                        Util.searchPlayer(playerPortalEvent.getPlayer().getName()).getGame().setGameStatus(GameStatus.slaughterDragon);
                     }
-                } else if (worldName.equals(netherWorldName)) {
-                    if (getPortalType(location) == PortalType.NETHER) {
+                } else if (worldName.equals(netherWorldName)) { //当此世界是地域
+                    if (getPortalType(location) == PortalType.NETHER) { //当此传送门为地狱门时
                         location.setWorld(server.getWorld(mainWorldName));
                         location.setX(location.getX() * 8);
                         location.setZ(location.getZ() * 8);
@@ -71,6 +75,7 @@ public class PlayerPortalListener implements Listener {
                     }
                 }
 
+                //设置此传送门指向至对应位置
                 playerPortalEvent.setTo(location);
             }
         } catch (Exception e) {

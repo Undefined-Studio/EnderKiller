@@ -11,6 +11,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -130,10 +131,16 @@ public class Room {
 
     //开始游戏
     public boolean startGame() {
-        //房间未满或不为等待开始状态时无法开始游戏
-//        if (!isFull() || roomStatus != RoomStatus.waitingForStart) {
-//            return false;
-//        }
+        if (!Boolean.valueOf(R.getConfig("canGameStartWhenRoomNotFull"))) {
+            //房间未满时无法开始游戏
+            if (!isFull()) {
+                return false;
+            }
+        }
+        //房间不处于等待开始状态时不允许开始游戏
+        if (roomStatus != RoomStatus.waitingForStart) {
+            return false;
+        }
 
         roomStatus = RoomStatus.inGame;
 
@@ -153,6 +160,18 @@ public class Room {
         for (GameCharacter gameCharacter : gameCharacters) {
             gameCharacter.getPlayer().sendMessage(message);
         }
+    }
+
+    public List<GameCharacter> getAliveGameCharacter() {
+        List<GameCharacter> aliveGameCharacter = new ArrayList<>();
+
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
+                aliveGameCharacter.add(gameCharacter);
+            }
+        }
+
+        return aliveGameCharacter;
     }
 
     public List<GameCharacter> getGameCharacters() {

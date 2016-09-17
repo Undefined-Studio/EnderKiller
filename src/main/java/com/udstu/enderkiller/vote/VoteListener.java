@@ -97,9 +97,10 @@ public class VoteListener implements Listener, TimerCallBack {
                 //若输入值不为任何一个投票项,则给予此玩家提示
                 if (indexOfVoteItems == -1) {
                     player.sendMessage(warning);
-                } else {
+                } else {    //投票给目标选项
                     player.sendMessage(R.getLang("youChoose") + ": " + message);
                     voteResults.get(indexOfVoteItems).votes += votePlayerAndWeights.get(indexOfPlayers).weight;
+                    voteResults.get(indexOfVoteItems).votePlayerAndWeights.add(votePlayerAndWeights.get(indexOfPlayers));
                     votePlayerAndWeights.remove(indexOfPlayers);
                 }
             }
@@ -146,7 +147,12 @@ public class VoteListener implements Listener, TimerCallBack {
             timer.cancel();
         }
         HandlerList.unregisterAll(this);
-        //回调函数
-        voteCallBack.voteCallBack(voteResults, voteCause);
+        //回调函数.加入计划任务使其变为同步
+        thisPlugin.getServer().getScheduler().runTask(thisPlugin, new Runnable() {
+            @Override
+            public void run() {
+                voteCallBack.voteCallBack(voteResults, voteCause);
+            }
+        });
     }
 }

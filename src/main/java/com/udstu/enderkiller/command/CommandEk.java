@@ -5,9 +5,9 @@ import com.udstu.enderkiller.character.DefaultGameCharacter;
 import com.udstu.enderkiller.character.Detective;
 import com.udstu.enderkiller.character.Warlock;
 import com.udstu.enderkiller.character.extend.GameCharacter;
-import com.udstu.enderkiller.enumeration.GameCharacterStatus;
-import com.udstu.enderkiller.enumeration.Occupation;
-import com.udstu.enderkiller.enumeration.RoomStatus;
+import com.udstu.enderkiller.enumeration.*;
+import com.udstu.enderkiller.game.extend.Game;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -201,7 +201,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("notInARoom"));
         } else {
             if (!locatedRoom.startGame()) {
-                commandSender.sendMessage(R.getLang("roomNotFull"));
+                commandSender.sendMessage(R.getLang("roomNotFullOrGameAlreadyStart"));
             }
         }
     }
@@ -347,6 +347,73 @@ public class CommandEk implements CommandExecutor {
         detective.research(targetGameCharacter);
     }
 
+    //发起投票 /ek vote
+    private void commandVote(CommandSender commandSender, Command command, String label, String[] args) {
+        Room room = Util.searchPlayer(commandSender.getName());
+        Game game;
+        GameCharacter gameCharacter;
+        Player player = (Player) commandSender;
+
+        //检测是否可以发动技能
+        if (room == null) { //不在房间中
+            commandSender.sendMessage(R.getLang("notInARoom"));
+            return;
+        }
+        game = room.getGame();
+        if ((room.getRoomStatus() != RoomStatus.inGame)) {  //游戏未开始
+            commandSender.sendMessage(R.getLang("gameNotStart"));
+            return;
+        }
+        gameCharacter = room.getGameCharacter(commandSender.getName());
+        if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
+            commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+        if (game.getGameStatus() == GameStatus.slaughterDragon) {    //屠龙阶段不允许投票
+            commandSender.sendMessage(R.getLang("canNotLaunchVoteWhileSlaughteringDragon"));
+            return;
+        }
+        if (game.getPutToDeathVoteStatus() != SkillStatus.available) {  //游戏当前天投票可用
+            commandSender.sendMessage(R.getLang("voteAlreadyLaunchedInThisDay"));
+            return;
+        }
+        if (player.getInventory().contains(Material.NETHER_STAR)) { //投票发起者拥有下界之星,则扣除一个
+            player.getInventory().remove(Material.NETHER_STAR);
+        } else {
+            player.sendMessage(R.getLang("noEnough").replace("{0}", Material.NETHER_STAR.toString()));
+            return;
+        }
+
+        game.putToDeathVote();
+    }
+
+    //队长 技能 召唤
+    private void commandSummon(CommandSender commandSender, Command command, String label, String[] args) {
+        Room room = Util.searchPlayer(commandSender.getName());
+        GameCharacter gameCharacter;
+
+        //检测是否可以发动技能
+        if (room == null) { //不在房间中
+            commandSender.sendMessage(R.getLang("notInARoom"));
+            return;
+        }
+        if ((room.getRoomStatus() != RoomStatus.inGame)) {  //游戏未开始
+            commandSender.sendMessage(R.getLang("gameNotStart"));
+            return;
+        }
+        gameCharacter = room.getGameCharacter(commandSender.getName());
+        if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
+            commandSender.sendMessage(R.getLang("youAreDead"));
+            return;
+        }
+        if (!gameCharacter.isTeamLeader()) {    //不是队长
+            commandSender.sendMessage(R.getLang("youAreNotTeamLeader"));
+            return;
+        }
+
+        gameCharacter.summon();
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length != 0) {
@@ -423,6 +490,22 @@ public class CommandEk implements CommandExecutor {
                 case "research": {
                     if (Player.class.isInstance(commandSender)) {
                         commandResearch(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "vote": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandVote(commandSender, command, label, args);
+                    } else {
+                        commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
+                    }
+                    return true;
+                }
+                case "summon": {
+                    if (Player.class.isInstance(commandSender)) {
+                        commandSummon(commandSender, command, label, args);
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }

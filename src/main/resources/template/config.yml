@@ -1,11 +1,22 @@
 lang: en  #Support en,cn
 maxRooms: 5
 spawnWorldSeed: 759242905499401623
+canGameStartWhenRoomNotFull: true #for test only
 worldNamePrefix: enderkill_world
 spawnWorldName: enderkill_world_spawn
 initMoneyType: EMERALD
 initMoneyAmount: 30
 voteAbstainSign: -1
+teleportDelay: 100 #ticks
 teamLeaderVoteTimeout: 200 #ticks
 teamLeaderDieVoteTimeout: 200 #ticks
 skillLaunchVoteTimeout: 100 #ticks
+putToDeathVoteTimeout: 600 #ticks
+voteToDieDelay: 100 #ticks
+duelVoteTimeout: 200 #ticks
+teamLeaderSummonDelay: 200 #ticks
+rewardType: IRON_INGOT
+rewardAmount: 64
+rewardExp: 999
+gameOverDelay: 200 #ticks
+deleteWorldsAfterGame: false
