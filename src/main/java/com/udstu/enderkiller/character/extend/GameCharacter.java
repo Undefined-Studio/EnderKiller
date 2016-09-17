@@ -9,6 +9,7 @@ import com.udstu.enderkiller.enumeration.SkillStatus;
 import com.udstu.enderkiller.task.SummonTask;
 import com.udstu.enderkiller.vote.VoteItem;
 import com.udstu.enderkiller.vote.VoteResult;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -81,6 +82,8 @@ public abstract class GameCharacter {
     public void onDeath() {
         gameCharacterStatus = GameCharacterStatus.dead;
         unsetTeamLeader();
+        //将玩家变为观察者
+        player.setGameMode(GameMode.SPECTATOR);
     }
 
     public void voteToDeath(List<VoteResult> voteResults) {
@@ -145,6 +148,8 @@ public abstract class GameCharacter {
     //游戏结束时执行
     public void gameOver() {
         unsetTeamLeader();
+        //将玩家重置为生存模式
+        player.setGameMode(GameMode.SURVIVAL);
     }
 
     public void setSummonStatus(SkillStatus summonStatus) {
