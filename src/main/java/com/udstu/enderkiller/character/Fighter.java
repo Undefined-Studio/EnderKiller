@@ -92,7 +92,7 @@ public class Fighter extends GameCharacter implements VoteCallBack, DeathEventCa
         room.broadcast(R.getLang("playerIsFighter").replace("{0}", player.getName()));
         room.broadcast(R.getLang("FighterDuelWith").replace("{0}", player.getName()).replace("{1}", targetGameCharacter.getPlayer().getName()));
         targetPlayer.sendMessage(R.getLang("youAreSelectedAsDuelTarget"));
-        targetPlayer.sendMessage(R.getLang("timeToTeleport") + ": " + teleportDelay);
+        targetPlayer.sendMessage(R.getLang("timeToTeleport") + ": " + teleportDelay / 20 + "s");
 
         //延迟传送
         thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new Runnable() {

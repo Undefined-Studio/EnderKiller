@@ -139,7 +139,7 @@ public abstract class GameCharacter {
         room.broadcast(R.getLang("teamLeaderStartSummon").replace("{0}", player.getName()));
         summonTask = thisPlugin.getServer().getScheduler().runTaskLater(thisPlugin, new SummonTask(room.getGameCharacters(), this), teamLeaderSummonDelay);
 
-        room.broadcast(R.getLang("timeToTeleport") + ": " + teamLeaderSummonDelay);
+        room.broadcast(R.getLang("timeToTeleport") + ": " + teamLeaderSummonDelay / 20 + "s");
     }
 
     //游戏结束时执行
