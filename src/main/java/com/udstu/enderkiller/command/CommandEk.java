@@ -201,7 +201,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("notInARoom"));
         } else {
             if (!locatedRoom.startGame()) {
-                commandSender.sendMessage(R.getLang("roomNotFull"));
+                commandSender.sendMessage(R.getLang("roomNotFullOrGameAlreadyStart"));
             }
         }
     }
