@@ -123,3 +123,4 @@ alignmentWin: Alignment {0} win!
 occupationInfo: Occupation info
 gameOver: Game over
 roomNotFullOrGameAlreadyStart: Room not full or game already started
+roomNotEmpty: Room not empty

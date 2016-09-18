@@ -184,9 +184,13 @@ public class CommandEk implements CommandExecutor {
             if (targetRoom.getRoomStatus() != RoomStatus.waitingForStart) {
                 commandSender.sendMessage(R.getLang("cannotDelRoomWhichIsInGame"));
             } else {
-                Lobby.remove(targetRoom);
-                commandSender.sendMessage(R.getLang("delRoomSuccessful"));
-                R.getMainClass().getLogger().info(commandSender.getName() + " deleted room " + targetRoom.getId());
+                if (targetRoom.getGameCharacters().size() != 0) {
+                    commandSender.sendMessage(R.getLang("roomNotEmpty"));
+                } else {
+                    Lobby.remove(targetRoom);
+                    commandSender.sendMessage(R.getLang("delRoomSuccessful"));
+                    R.getMainClass().getLogger().info(commandSender.getName() + " deleted room " + targetRoom.getId());
+                }
             }
         }
     }
