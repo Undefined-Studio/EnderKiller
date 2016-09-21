@@ -70,6 +70,9 @@ public abstract class Game implements VoteCallBack {
         //log
         thisPlugin.getLogger().info("房间 " + room.getId() + " 开始了游戏");
 
+        if (Boolean.valueOf(R.getConfig("cleanOutInventoryBeforeGame"))) {
+            cleanInventory();
+        }
         initOccupation();
         initWorlds();
         tpPlayersToSpawnWorld();
@@ -81,6 +84,12 @@ public abstract class Game implements VoteCallBack {
 
         room.setGame(this);
         room.updateScoreBoard();
+    }
+
+    private void cleanInventory() {
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            gameCharacter.getPlayer().getInventory().clear();
+        }
     }
 
     protected abstract void initOccupation();
@@ -443,6 +452,9 @@ public abstract class Game implements VoteCallBack {
         room.broadcast(R.getLang("gameOver"));
         room.broadcast(R.getLang("alignmentWin").replace("{0}", alignment.toString()));
 
+        if (Boolean.valueOf(R.getConfig("cleanOutInventoryAfterGame"))) {
+            cleanInventory();
+        }
         reward();
         broadcastCharacterInfo();
         room.broadcast(R.getLang("timeToTeleport") + ": " + gameOverDelay / 20 + "s");
