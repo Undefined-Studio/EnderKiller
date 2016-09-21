@@ -20,3 +20,5 @@ rewardAmount: 64
 rewardExp: 999
 gameOverDelay: 200 #ticks
 deleteWorldsAfterGame: false
+cleanOutInventoryBeforeGame: true
+cleanOutInventoryAfterGame: true
