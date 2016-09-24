@@ -8,6 +8,7 @@ import com.udstu.enderkiller.character.extend.GameCharacter;
 import com.udstu.enderkiller.enumeration.*;
 import com.udstu.enderkiller.game.extend.Game;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -213,6 +214,7 @@ public class CommandEk implements CommandExecutor {
     //传送至当前游戏的主世界 /ek tp
     private void commandTp(CommandSender commandSender, Command command, String label, String[] args) {
         Room locatedRoom;
+        World mainWorld;
 
         locatedRoom = Util.searchPlayer(commandSender.getName());
 
@@ -221,7 +223,8 @@ public class CommandEk implements CommandExecutor {
         } else {
             if (locatedRoom.getRoomStatus() == RoomStatus.inGame) {
                 commandSender.sendMessage(R.getLang("teleporting"));
-                ((Player) commandSender).teleport(locatedRoom.getGame().getMainWorldSpawnLocation());
+                mainWorld = locatedRoom.getGame().getMainWorld();
+                ((Player) commandSender).teleport(mainWorld.getHighestBlockAt(mainWorld.getSpawnLocation()).getLocation());
             } else {
                 commandSender.sendMessage(R.getLang("gameNotStart"));
             }

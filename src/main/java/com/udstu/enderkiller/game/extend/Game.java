@@ -571,6 +571,10 @@ public abstract class Game implements VoteCallBack {
         return putToDeathVoteStatus;
     }
 
+    public World getMainWorld() {
+        return mainWorld;
+    }
+
     public Location getMainWorldSpawnLocation() {
         return mainWorldSpawnLocation;
     }
