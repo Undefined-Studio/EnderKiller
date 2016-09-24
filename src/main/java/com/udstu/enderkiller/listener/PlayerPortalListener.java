@@ -36,6 +36,7 @@ public class PlayerPortalListener implements Listener {
         TravelAgent travelAgent = playerPortalEvent.getPortalTravelAgent();
         Server server = R.getMainClass().getServer();
         World world = playerPortalEvent.getPlayer().getWorld();
+        World theEndWorld;
         Location location = playerPortalEvent.getFrom();
         String worldName = world.getName();
         String worldNamePrefix = R.getConfig("worldNamePrefix");
@@ -61,8 +62,10 @@ public class PlayerPortalListener implements Listener {
                         location.setZ(location.getZ() / 8);
                         location = travelAgent.findOrCreate(location);
                     } else if (getPortalType(location) == PortalType.ENDER) {   //当此传送门为末地门时
-                        //(100,54,0)是默认的末地出生点
-                        location = new Location(server.getWorld(theEndWorldName), 100, 54, 0);
+                        theEndWorld = server.getWorld(theEndWorldName);
+                        //TODO 传送至末地应该有一个黑曜石平台,算法不明
+                        //末地出生点的最高点(鸡巴型基岩祭坛顶端)
+                        location = theEndWorld.getHighestBlockAt(theEndWorld.getSpawnLocation()).getLocation();
                         //当有人进入末地时,改变对应房间的游戏的状态至屠龙阶段
                         try {
                             Util.searchPlayer(playerPortalEvent.getPlayer().getName()).getGame().setGameStatus(GameStatus.slaughterDragon);

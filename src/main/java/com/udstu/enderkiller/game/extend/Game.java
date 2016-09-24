@@ -500,6 +500,9 @@ public abstract class Game implements VoteCallBack {
     public void over() {
         World defaultWorld = server.getWorlds().get(0);
 
+        //取消本局游戏开启的任务
+        removeTimeLapseTask();
+
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             gameCharacter.gameOver();
         }
@@ -530,9 +533,6 @@ public abstract class Game implements VoteCallBack {
                 thisPlugin.getLogger().warning("房间 " + room.getId() + " 的一部分地图在游戏后未能删除");
             }
         }
-
-        //取消本局游戏开启的任务
-        removeTimeLapseTask();
 
         //重置角色
         for (int i = 0; i < room.getGameCharacters().size(); i++) {
