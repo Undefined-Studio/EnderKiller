@@ -7,18 +7,18 @@ spawnWorldName: enderkill_world_spawn
 initMoneyType: EMERALD
 initMoneyAmount: 30
 voteAbstainSign: -1
-teleportDelay: 100 #ticks
-teamLeaderVoteTimeout: 200 #ticks
-teamLeaderDieVoteTimeout: 200 #ticks
-skillLaunchVoteTimeout: 100 #ticks
-putToDeathVoteTimeout: 600 #ticks
-voteToDieDelay: 100 #ticks
-duelVoteTimeout: 200 #ticks
-teamLeaderSummonDelay: 200 #ticks
+teleportDelay: 200 #ticks
+teamLeaderVoteTimeout: 6000 #ticks
+teamLeaderDieVoteTimeout: 600 #ticks
+skillLaunchVoteTimeout: 600 #ticks
+putToDeathVoteTimeout: 6000 #ticks
+voteToDieDelay: 200 #ticks
+duelVoteTimeout: 600 #ticks
+teamLeaderSummonDelay: 600 #ticks
 rewardType: IRON_INGOT
 rewardAmount: 64
 rewardExp: 999
 gameOverDelay: 200 #ticks
-deleteWorldsAfterGame: false
+deleteWorldsAfterGame: true
 cleanOutInventoryBeforeGame: true
 cleanOutInventoryAfterGame: true

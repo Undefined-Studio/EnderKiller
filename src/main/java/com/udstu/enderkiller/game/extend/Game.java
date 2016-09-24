@@ -492,7 +492,7 @@ public abstract class Game implements VoteCallBack {
         room.broadcast(R.getLang("occupationInfo") + ": ");
         for (int i = 0; i < gameCharacters.size(); i++) {
             gameCharacter = gameCharacters.get(i);
-            room.broadcast("[" + i + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
+            room.broadcast("[" + (i + 1) + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
         }
     }
 
