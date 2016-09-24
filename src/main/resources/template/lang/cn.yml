@@ -48,6 +48,7 @@ mode: 模式
 onlyPlayerCanUseThisCommand: 只有玩家可以使用此命令
 roomId: 房间号
 alreadyInARoom: 已在一个房间中
+gameAlreadyStart: 游戏已开始
 noSuchRoom: 没有这个房间
 roomIsFull: 房间已满
 notInARoom: 不在一个房间中

@@ -48,6 +48,7 @@ mode: mode
 onlyPlayerCanUseThisCommand: Only player can use this command
 roomId: Room id
 alreadyInARoom: Already in a room
+gameAlreadyStart: Game already start
 noSuchRoom: No such room
 roomIsFull: Room is full
 notInARoom: Not in a room

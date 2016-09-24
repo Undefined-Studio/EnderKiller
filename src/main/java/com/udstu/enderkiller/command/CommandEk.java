@@ -135,15 +135,19 @@ public class CommandEk implements CommandExecutor {
 
         if (targetRoom == null) {
             commandSender.sendMessage(R.getLang("noSuchRoom"));
-        } else {
-            if (targetRoom.isFull()) {
-                commandSender.sendMessage(R.getLang("roomIsFull"));
-            } else {
-                targetRoom.add(new DefaultGameCharacter((Player) commandSender, targetRoom));
-                commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
-                R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
-            }
+            return;
         }
+        if (targetRoom.getRoomStatus() == RoomStatus.inGame) {
+            commandSender.sendMessage(R.getLang("gameAlreadyStart"));
+            return;
+        }
+        if (targetRoom.isFull()) {
+            commandSender.sendMessage(R.getLang("roomIsFull"));
+            return;
+        }
+        targetRoom.add(new DefaultGameCharacter((Player) commandSender, targetRoom));
+        commandSender.sendMessage(R.getLang("joinRoom").replace("{$roomId}", Integer.valueOf(targetRoom.getId()).toString()));
+        R.getMainClass().getLogger().info(commandSender.getName() + " joined room " + targetRoom.getId());
     }
 
     //退出房间 /ek exit
