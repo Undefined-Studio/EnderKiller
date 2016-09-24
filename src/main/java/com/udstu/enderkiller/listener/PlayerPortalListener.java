@@ -64,7 +64,11 @@ public class PlayerPortalListener implements Listener {
                         //(100,54,0)是默认的末地出生点
                         location = new Location(server.getWorld(theEndWorldName), 100, 54, 0);
                         //当有人进入末地时,改变对应房间的游戏的状态至屠龙阶段
-                        Util.searchPlayer(playerPortalEvent.getPlayer().getName()).getGame().setGameStatus(GameStatus.slaughterDragon);
+                        try {
+                            Util.searchPlayer(playerPortalEvent.getPlayer().getName()).getGame().setGameStatus(GameStatus.slaughterDragon);
+                        } catch (Exception e) {
+                            //当此玩家未加入任何房间时
+                        }
                     }
                 } else if (worldName.equals(netherWorldName)) { //当此世界是地域
                     if (getPortalType(location) == PortalType.NETHER) { //当此传送门为地狱门时
