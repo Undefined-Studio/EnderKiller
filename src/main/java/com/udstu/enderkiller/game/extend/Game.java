@@ -70,6 +70,7 @@ public abstract class Game implements VoteCallBack {
         //log
         thisPlugin.getLogger().info("房间 " + room.getId() + " 开始了游戏");
 
+        healAllPlayer();
         if (Boolean.valueOf(R.getConfig("cleanOutInventoryBeforeGame"))) {
             cleanInventory();
         }
@@ -84,6 +85,15 @@ public abstract class Game implements VoteCallBack {
 
         room.setGame(this);
         room.updateScoreBoard();
+    }
+
+    private void healAllPlayer() {
+        Player player;
+
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            player = gameCharacter.getPlayer();
+            player.setHealth(player.getMaxHealth());
+        }
     }
 
     private void cleanInventory() {
