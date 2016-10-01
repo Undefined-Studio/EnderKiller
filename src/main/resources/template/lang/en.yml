@@ -12,6 +12,7 @@ commandCurse: The skill 'curse' of warlock
 commandResearch: The skill 'research' of detective
 commandVote: Launch a putting to death vote
 commandSummon: The skill 'summon' of teamleader
+commandShow: Show the info of a room
 
 inGame: InGame
 waitingForStart: WaitingForStart
@@ -126,3 +127,4 @@ gameOver: Game over
 roomNotFullOrGameAlreadyStart: Room not full or game already started
 roomNotEmpty: Room not empty
 teammates: Teammates
+roomName: Room name

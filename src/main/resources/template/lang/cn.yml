@@ -12,6 +12,7 @@ commandCurse: 巫师的技能'诅咒'
 commandResearch: 侦探的技能'调查'
 commandVote: 发起处死投票
 commandSummon: 队长的技能'召集'
+commandShow: 显示一个房间的信息
 
 inGame: 游戏中
 waitingForStart: 等待开始
@@ -126,3 +127,4 @@ gameOver: 游戏结束
 roomNotFullOrGameAlreadyStart: 房间未满或游戏已开始
 roomNotEmpty: 房间非空
 teammates: 队友
+roomName: 房间名

@@ -402,7 +402,7 @@ public class CommandEk implements CommandExecutor {
         game.putToDeathVote();
     }
 
-    //队长 技能 召唤
+    //队长 技能 召唤 /ek summon
     private void commandSummon(CommandSender commandSender, Command command, String label, String[] args) {
         Room room = Util.searchPlayer(commandSender.getName());
         GameCharacter gameCharacter;
@@ -427,6 +427,39 @@ public class CommandEk implements CommandExecutor {
         }
 
         gameCharacter.summon();
+    }
+
+    //op指令,显示房间信息 /ek show
+    private void commandShow(CommandSender commandSender, Command command, String label, String[] args) {
+        String roomId;
+        Room targetRoom;
+        List<String> info = new ArrayList<>();
+
+        //非控制台或命令方块且不为op时禁止使用
+        if ((!commandSender.getName().equals("CONSOLE") || !commandSender.getName().equals("@")) && !commandSender.isOp()) {
+            commandSender.sendMessage("Permission Denied");
+            return;
+        }
+
+        if (args.length < 2) {
+            commandSender.sendMessage(R.getLang("usage") + " /" + label + " show <" + R.getLang("roomId") + ">");
+            return;
+        }
+        roomId = args[1];
+
+        targetRoom = Util.searchRoom(roomId);
+
+        if (targetRoom == null) {
+            commandSender.sendMessage(R.getLang("noSuchRoom"));
+            return;
+        }
+
+        info.add(R.getLang("roomId") + ": " + targetRoom.getId());
+        info.add(R.getLang("roomName") + ": " + targetRoom.getName());
+        info.add(R.getLang("mode") + ": " + targetRoom.getSlot());
+        info.add(R.getLang("roomStatus") + ": " + targetRoom.getRoomStatus());
+        info.add(R.getLang("occupationInfo") + ":\n" + targetRoom.toGameCharactersInfoString(targetRoom.getGameCharacters()));
+        commandSender.sendMessage(info.toArray(new String[info.size()]));
     }
 
     @Override
@@ -524,6 +557,10 @@ public class CommandEk implements CommandExecutor {
                     } else {
                         commandSender.sendMessage(R.getLang("onlyPlayerCanUseThisCommand"));
                     }
+                    return true;
+                }
+                case "show": {
+                    commandShow(commandSender, command, label, args);
                     return true;
                 }
             }

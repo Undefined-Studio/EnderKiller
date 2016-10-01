@@ -222,7 +222,7 @@ public class Room {
         List<String> gameCharactersInfoList = new ArrayList<>();
 
         for (GameCharacter gameCharacter : gameCharacters) {
-            gameCharactersInfoList.add("[" + (indexOfGameCharacter(gameCharacter) + 1) + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
+            gameCharactersInfoList.add("[" + (indexOfGameCharacter(gameCharacter) + 1) + "]" + " " + gameCharacter.getPlayer().getName() + " " + String.valueOf(gameCharacter.getAlignment()) + " " + String.valueOf(gameCharacter.getOccupation()));
         }
 
         return gameCharactersInfoList;

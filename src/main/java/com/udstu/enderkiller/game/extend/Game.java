@@ -183,11 +183,7 @@ public abstract class Game implements VoteCallBack {
         }
 
         //log
-        String occupationsInfo = "";
-        for (i = 0; i < gameCharacters.size(); i++) {
-            occupationsInfo += "\n" + "[" + (i + 1) + "]" + gameCharacters.get(i).getPlayer().getName() + " " + alignmentAndOccupations[i].alignment + " " + alignmentAndOccupations[i].occupation;
-        }
-        thisPlugin.getLogger().info("房间 " + room.getId() + " 的身份分配情况: " + occupationsInfo);
+        thisPlugin.getLogger().info("房间 " + room.getId() + " 的身份分配情况:\n" + room.toGameCharactersInfoString(room.getGameCharacters()));
     }
 
     //给予初始金钱(默认为绿宝石)
