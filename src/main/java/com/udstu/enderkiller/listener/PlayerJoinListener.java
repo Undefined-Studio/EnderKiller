@@ -21,13 +21,13 @@ public class PlayerJoinListener implements Listener {
         GameCharacter gameCharacter;
 
         if (targetRoom != null) {
-            gameCharacter = targetRoom.getGameCharacter(playerName);
+            gameCharacter = targetRoom.getGameCharacters(playerName);
             if (gameCharacter.isTeamLeader()) {
                 player.setMaxHealth(player.getMaxHealth() + 10);
                 player.setHealth(player.getHealth() + 10);
             }
 
-            targetRoom.getGameCharacter(playerName).setPlayer(player);
+            targetRoom.getGameCharacters(playerName).setPlayer(player);
             targetRoom.updateScoreBoard();
         }
     }

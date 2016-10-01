@@ -1,7 +1,9 @@
 package com.udstu.enderkiller;
 
 import com.udstu.enderkiller.character.extend.GameCharacter;
+import com.udstu.enderkiller.enumeration.Alignment;
 import com.udstu.enderkiller.enumeration.GameCharacterStatus;
+import com.udstu.enderkiller.enumeration.Occupation;
 import com.udstu.enderkiller.enumeration.RoomStatus;
 import com.udstu.enderkiller.game.Game8;
 import com.udstu.enderkiller.game.extend.Game;
@@ -74,7 +76,7 @@ public class Room {
     }
 
     //获取对应玩家的角色指针
-    public GameCharacter getGameCharacter(String playerName) {
+    public GameCharacter getGameCharacters(String playerName) {
         for (GameCharacter gameCharacter : gameCharacters) {
             if (gameCharacter.getPlayer().getName().equals(playerName)) {
                 return gameCharacter;
@@ -105,7 +107,7 @@ public class Room {
 
         for (int i = 1; i <= gameCharacters.size(); i++) {
             player = gameCharacters.get(i - 1).getPlayer();
-            gameCharacter = getGameCharacter(player.getName());
+            gameCharacter = getGameCharacters(player.getName());
             displayPlayerName = "";
 
             //玩家为队长时增加前缀
@@ -162,16 +164,78 @@ public class Room {
         }
     }
 
-    public List<GameCharacter> getAliveGameCharacter() {
-        List<GameCharacter> aliveGameCharacter = new ArrayList<>();
+    //获得存活的角色
+    public List<GameCharacter> getGameCharacters(GameCharacterStatus gameCharacterStatus) {
+        List<GameCharacter> aliveGameCharacters = new ArrayList<>();
 
         for (GameCharacter gameCharacter : gameCharacters) {
-            if (gameCharacter.getGameCharacterStatus() == GameCharacterStatus.alive) {
-                aliveGameCharacter.add(gameCharacter);
+            if (gameCharacter.getGameCharacterStatus() == gameCharacterStatus) {
+                aliveGameCharacters.add(gameCharacter);
             }
         }
 
-        return aliveGameCharacter;
+        return aliveGameCharacters;
+    }
+
+    //获得某个阵营的角色
+    public List<GameCharacter> getGameCharacters(Alignment alignment) {
+        List<GameCharacter> alignmentGameCharacters = new ArrayList<>();
+
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getAlignment() == alignment) {
+                alignmentGameCharacters.add(gameCharacter);
+            }
+        }
+
+        return alignmentGameCharacters;
+    }
+
+    //获得某个职业的角色
+    public List<GameCharacter> getGameCharacters(Occupation occupation) {
+        List<GameCharacter> occupationGameCharacters = new ArrayList<>();
+
+        for (GameCharacter gameCharacter : gameCharacters) {
+            if (gameCharacter.getOccupation() == occupation) {
+                occupationGameCharacters.add(gameCharacter);
+            }
+        }
+
+        return occupationGameCharacters;
+    }
+
+    //获得一个玩家的序号
+    public int indexOfGameCharacter(Player player) {
+        for (int i = 0; i < gameCharacters.size(); i++) {
+            if (gameCharacters.get(i).getPlayer().getName().equals(player.getName())) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int indexOfGameCharacter(GameCharacter gameCharacter) {
+        return indexOfGameCharacter(gameCharacter.getPlayer());
+    }
+
+    public List<String> toGameCharactersInfoList(List<GameCharacter> gameCharacters) {
+        List<String> gameCharactersInfoList = new ArrayList<>();
+
+        for (GameCharacter gameCharacter : gameCharacters) {
+            gameCharactersInfoList.add("[" + (indexOfGameCharacter(gameCharacter) + 1) + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
+        }
+
+        return gameCharactersInfoList;
+    }
+
+    public String toGameCharactersInfoString(List<GameCharacter> gameCharacters) {
+        List<String> gameCharactersInfoList = toGameCharactersInfoList(gameCharacters);
+        String[] gameCharactersInfosStringArray = gameCharactersInfoList.toArray(new String[gameCharactersInfoList.size()]);
+        String gameCharactersInfoString = "";
+        for (String string : gameCharactersInfosStringArray) {
+            gameCharactersInfoString += string + "\n";
+        }
+        return gameCharactersInfoString;
     }
 
     public List<GameCharacter> getGameCharacters() {

@@ -24,15 +24,15 @@ public class PlayerDeathListener implements Listener {
 
         //玩家在一个房间中且游戏已开始时
         if (room != null && room.getRoomStatus() == RoomStatus.inGame) {
-            gameCharacter = room.getGameCharacter(playerName);
+            gameCharacter = room.getGameCharacters(playerName);
 
             //若此角色为队长时进行队长死亡投票
             if (gameCharacter.isTeamLeader()) {
                 //先标记为死亡再发起投票
-                room.getGameCharacter(playerName).onDeath();
+                room.getGameCharacters(playerName).onDeath();
                 room.getGame().launchTeamLeaderDieVote(player);
             } else {
-                room.getGameCharacter(playerName).onDeath();
+                room.getGameCharacters(playerName).onDeath();
             }
 
             //更新计分板

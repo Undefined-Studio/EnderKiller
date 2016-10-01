@@ -23,7 +23,7 @@ public class PlayerQuitListener implements Listener {
         GameCharacter gameCharacter;
 
         if (targetRoom != null) {
-            gameCharacter = targetRoom.getGameCharacter(player.getName());
+            gameCharacter = targetRoom.getGameCharacters(player.getName());
             if (gameCharacter.isTeamLeader()) {
                 player.setMaxHealth(player.getMaxHealth() - 10);
             }

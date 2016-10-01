@@ -203,24 +203,14 @@ public abstract class Game implements VoteCallBack {
 
     //告知所有潜伏者全部潜伏者信息
     private void toldTeamMates() {
-        List<String> occupationInfos = new ArrayList<>();
-        List<GameCharacter> gameCharacters = room.getGameCharacters();
-        GameCharacter gameCharacter;
-        String[] occupationInfosStrArray;
+        List<String> lurkerGameCharactersInfos = room.toGameCharactersInfoList(room.getGameCharacters(Alignment.lurker));
+        String[] lurkerGameCharactersInfosStringArray = lurkerGameCharactersInfos.toArray(new String[lurkerGameCharactersInfos.size()]);
+        List<GameCharacter> LurkerGameCharacters = room.getGameCharacters(Alignment.lurker);
 
-        for (int i = 0; i < gameCharacters.size(); i++) {
-            gameCharacter = gameCharacters.get(i);
+        for (GameCharacter gameCharacter : LurkerGameCharacters) {
             if (gameCharacter.getAlignment() == Alignment.lurker) {
-                occupationInfos.add("[" + i + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
-            }
-        }
-
-        occupationInfosStrArray = occupationInfos.toArray(new String[occupationInfos.size()]);
-
-        for (GameCharacter gameCharacter1 : gameCharacters) {
-            if (gameCharacter1.getAlignment() == Alignment.lurker) {
-                gameCharacter1.getPlayer().sendMessage(R.getLang("occupationInfo") + ": ");
-                gameCharacter1.getPlayer().sendMessage(occupationInfosStrArray);
+                gameCharacter.getPlayer().sendMessage(R.getLang("occupationInfo") + ": ");
+                gameCharacter.getPlayer().sendMessage(lurkerGameCharactersInfosStringArray);
             }
         }
     }
@@ -403,7 +393,7 @@ public abstract class Game implements VoteCallBack {
                     launchTeamLeaderVote();
                 } else {
                     teamLeaderName = voteResults.get(0).voteItem.item;
-                    gameCharacter = room.getGameCharacter(teamLeaderName);
+                    gameCharacter = room.getGameCharacters(teamLeaderName);
 
                     room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
                     gameCharacter.getPlayer().sendMessage(R.getLang("youBecomeTeamLeader"));
@@ -418,7 +408,7 @@ public abstract class Game implements VoteCallBack {
                 //在有投票时,即非超时未选或弃权的情况
                 if (voteResults.get(0).votes != 0) {
                     teamLeaderName = voteResults.get(0).voteItem.item;
-                    gameCharacter = room.getGameCharacter(teamLeaderName);
+                    gameCharacter = room.getGameCharacters(teamLeaderName);
 
                     room.broadcast(R.getLang("newTeamleaderBorn") + ": " + teamLeaderName);
                     gameCharacter.getPlayer().sendMessage(R.getLang("youBecomeTeamLeader"));
@@ -445,7 +435,7 @@ public abstract class Game implements VoteCallBack {
                     putToDeathVote();
                 } else if (voteResults.get(0).votes != 0) {  //第一名不为0票
                     playerName = voteResults.get(0).voteItem.item;
-                    gameCharacter = room.getGameCharacter(playerName);
+                    gameCharacter = room.getGameCharacters(playerName);
 
                     room.broadcast(R.getLang("playerVotedToDeath").replace("{0}", playerName));
                     gameCharacter.voteToDeath(voteResults);

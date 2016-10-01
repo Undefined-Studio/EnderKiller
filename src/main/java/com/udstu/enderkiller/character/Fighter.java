@@ -81,7 +81,7 @@ public class Fighter extends GameCharacter implements VoteCallBack, DeathEventCa
         }
 
         //非弃票
-        duel(room.getGameCharacter(voteResults.get(0).voteItem.item));
+        duel(room.getGameCharacters(voteResults.get(0).voteItem.item));
     }
 
     //斗士 技能 决斗
@@ -109,7 +109,7 @@ public class Fighter extends GameCharacter implements VoteCallBack, DeathEventCa
     @Override
     public void deathEventCallBack(Player diedPlayer) {
         //场上除斗士外还有其他人时
-        if (room.getAliveGameCharacter().size() > 1) {
+        if (room.getGameCharacters(GameCharacterStatus.alive).size() > 1) {
             //若斗士存活,则杀死
             if (gameCharacterStatus == GameCharacterStatus.alive) {
                 room.broadcast(R.getLang("playerPutToDeath").replace("{0}", player.getName()));

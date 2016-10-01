@@ -248,10 +248,14 @@ public class CommandEk implements CommandExecutor {
             infoList.add(R.getLang("roomStatus") + ": " + locatedRoom.getRoomStatus().toString());
             if (locatedRoom.getRoomStatus() == RoomStatus.inGame) {
                 infoList.add(R.getLang("gameTime") + ": day " + locatedRoom.getGame().getDay());
-                gameCharacter = locatedRoom.getGameCharacter(commandSender.getName());
+                gameCharacter = locatedRoom.getGameCharacters(commandSender.getName());
                 infoList.add(R.getLang("yourAlignment") + ": " + gameCharacter.getAlignment());
                 infoList.add(R.getLang("yourOccupation") + ": " + gameCharacter.getOccupation());
                 infoList.add(R.getLang("location") + ": " + ((Player) commandSender).getWorld().getName());
+                //若为潜伏者则显示其队友
+                if (gameCharacter.getAlignment() == Alignment.lurker) {
+                    infoList.add(R.getLang("occupationInfo") + ": " + locatedRoom.toGameCharactersInfoString(locatedRoom.getGameCharacters(Alignment.lurker)));
+                }
             }
         }
 
@@ -276,7 +280,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("gameNotStart"));
             return;
         }
-        gameCharacter = room.getGameCharacter(commandSender.getName());
+        gameCharacter = room.getGameCharacters(commandSender.getName());
         if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
             commandSender.sendMessage(R.getLang("youAreDead"));
             return;
@@ -299,7 +303,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("targetPlayerNotInTheSameRoomWithYou"));
             return;
         }
-        targetGameCharacter = targetRoom.getGameCharacter(targetPlayerName);
+        targetGameCharacter = targetRoom.getGameCharacters(targetPlayerName);
         if (targetGameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {    //目标已死亡
             commandSender.sendMessage(R.getLang("targetAlreadyDie"));
             return;
@@ -326,7 +330,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("gameNotStart"));
             return;
         }
-        gameCharacter = room.getGameCharacter(commandSender.getName());
+        gameCharacter = room.getGameCharacters(commandSender.getName());
         if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
             commandSender.sendMessage(R.getLang("youAreDead"));
             return;
@@ -349,7 +353,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("targetPlayerNotInTheSameRoomWithYou"));
             return;
         }
-        targetGameCharacter = targetRoom.getGameCharacter(targetPlayerName);
+        targetGameCharacter = targetRoom.getGameCharacters(targetPlayerName);
         if (targetGameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {    //目标已死亡
             commandSender.sendMessage(R.getLang("targetAlreadyDie"));
             return;
@@ -375,7 +379,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("gameNotStart"));
             return;
         }
-        gameCharacter = room.getGameCharacter(commandSender.getName());
+        gameCharacter = room.getGameCharacters(commandSender.getName());
         if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
             commandSender.sendMessage(R.getLang("youAreDead"));
             return;
@@ -412,7 +416,7 @@ public class CommandEk implements CommandExecutor {
             commandSender.sendMessage(R.getLang("gameNotStart"));
             return;
         }
-        gameCharacter = room.getGameCharacter(commandSender.getName());
+        gameCharacter = room.getGameCharacters(commandSender.getName());
         if (gameCharacter.getGameCharacterStatus() != GameCharacterStatus.alive) {   //角色已死亡
             commandSender.sendMessage(R.getLang("youAreDead"));
             return;

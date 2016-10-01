@@ -157,7 +157,7 @@ public class Util {
     public static GameCharacter searchGameCharacter(String playerName) {
         GameCharacter gameCharacter;
         for (Room room : Lobby.getRoomList()) {
-            gameCharacter = room.getGameCharacter(playerName);
+            gameCharacter = room.getGameCharacters(playerName);
             if (gameCharacter != null) {
                 return gameCharacter;
             }
