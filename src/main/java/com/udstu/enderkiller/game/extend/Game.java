@@ -70,6 +70,7 @@ public abstract class Game implements VoteCallBack {
         //log
         thisPlugin.getLogger().info("房间 " + room.getId() + " 开始了游戏");
 
+        changeGameMode();
         healAllPlayer();
         if (Boolean.valueOf(R.getConfig("cleanOutInventoryBeforeGame"))) {
             cleanInventory();
@@ -87,12 +88,19 @@ public abstract class Game implements VoteCallBack {
         room.updateScoreBoard();
     }
 
+    private void changeGameMode() {
+        for (GameCharacter gameCharacter : room.getGameCharacters()) {
+            gameCharacter.getPlayer().setGameMode(GameMode.SURVIVAL);
+        }
+    }
+
     private void healAllPlayer() {
         Player player;
 
         for (GameCharacter gameCharacter : room.getGameCharacters()) {
             player = gameCharacter.getPlayer();
             player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(20);
         }
     }
 
@@ -486,14 +494,8 @@ public abstract class Game implements VoteCallBack {
 
     //广播所有角色信息
     private void broadcastCharacterInfo() {
-        List<GameCharacter> gameCharacters = room.getGameCharacters();
-        GameCharacter gameCharacter;
-
         room.broadcast(R.getLang("occupationInfo") + ": ");
-        for (int i = 0; i < gameCharacters.size(); i++) {
-            gameCharacter = gameCharacters.get(i);
-            room.broadcast("[" + (i + 1) + "]" + " " + gameCharacter.getPlayer().getName() + " " + gameCharacter.getAlignment().toString() + " " + gameCharacter.getOccupation().toString());
-        }
+        room.broadcast(room.toGameCharactersInfoString(room.getGameCharacters()));
     }
 
     //退出游戏
